@@ -21,3 +21,22 @@ def clamp_reading(r: Reading, min_v: float, max_v: float) -> Reading:
     clamped = max(min_v, min(max_v, r.value))
     return Reading(sensor_id=r.sensor_id, value=clamped, sensor_type=r.sensor_type)
 ```
+## Semana 1· Entrada 2
+
+**Prompt usado:** "quiero que construyas 4 test fsm del fsm demo que se construyó dentro de la carpeta de martes14, estado inicial, transición RED→GREEN, ciclo completo que vuelve a RED, y conteo de ciclos."
+
+**Qué produjo la IA:** Copilot generó un código con los 4 tests, sin embargo, los produjo con unnitest, que vienen siendo una librería más antigua, siendo más compleja a mi parecer y no corresponde a lo que estoy viendo.
+```python
+import unittest
+from fsm_demo import TrafficLightFSM, TrafficLightState
+```
+
+**Mi decisión:** Rechazé el trabajo realizado por la IA, le solicité de nuevo la creación de los 4 tests pero haciendo uso de pytest, ya que esa fue la instrucción original.
+
+## Semana 1· Entrada 3
+
+**Prompt usado:** "Vuelve a construir el código pero esta vez usando pytest y generando los 4 tests"
+
+**Qué produjo la IA:** Copilot generó de nuevo los 4 tests, esta vez usando pytest
+
+**Mi decisión:** Acepté el trabajo generado por la IA, aunque va a estar sujeta a cambios dependiendo el análisis que se le de al tema con respecto a las FSM.
