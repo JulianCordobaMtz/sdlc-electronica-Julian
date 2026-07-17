@@ -40,3 +40,21 @@ from fsm_demo import TrafficLightFSM, TrafficLightState
 **Qué produjo la IA:** Copilot generó de nuevo los 4 tests, esta vez usando pytest
 
 **Mi decisión:** Acepté el trabajo generado por la IA, aunque va a estar sujeta a cambios dependiendo el análisis que se le de al tema con respecto a las FSM.
+
+
+## Semana 1· Entrada 4
+
+**Prompt usado:** "Necesito que generes 2 tests por cada principio de S, O y L, del archivo solid_srp_ocp_lsp.py dentro de carpeta Miercoles 15, por lo que serán 6 tests al final, uno por cada ejemplo, lo harás con pytest"
+
+**Qué produjo la IA:** Copilot generó de nuevo los tests, 2 por cada principio, para validar que el diseño de los 6 casos, agrupandolos en 3 clases distintas, inyectando valores simulados de sensores.
+
+**Mi decisión:** Acepté el trabajo que hizo, dado que si cumplia con lo solicitado y sirvió para comprobar los 3 primeros principios de la arquitectura SOLID. Aunque tuve que comentar el código debido a que no todo lo lograba comprender.
+
+
+## Semana 1· Entrada 6
+
+**Prompt usado:** "Quiero que construyas un código donde se incluyan los 2 últimos principios de SOLID, los cuales vienen siendo el principio de segregación de interfaces y el principio de sustitución de LISKOV, quiero que la estructura sea que por cada principio sea uno bueno y otro malo, estructurado hacia el ámbito de sensores como los demás trabajos"
+
+**Qué produjo la IA:** Copilot generó el código con los últimos 2 principios, con los comentarios respectivos para comprender mejor las intenciones de cada sección, de todas formas se hizo un análisis completo.
+
+**Mi decisión:** Acepté el código generado, se aplicó un estudio aparte además de lo que vienen siendo estos 2 conceptos y se buscaron más ejemplos para compararlos para ver si lo que se había integrado era lo correcto.
