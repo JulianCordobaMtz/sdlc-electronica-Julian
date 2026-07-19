@@ -100,3 +100,10 @@ Prompt usado: "Analiza las clases vacías en este archivo recorder.py, básate e
 **Qué produjo la IA:** Copilot generó los escenarios de prueba con pytest para el módulo de almacenamiento recorder.py, reemplazando los esqueletos vacíos con la lógica de validación correspondiente y sus respectivos comentarios.
 
 **Mi decisión:** Se le aplicaron las pruebas dentro de pytest junto con la lectura de su código y resultaron las respuestas positivas,por lo que se procede a almacenar el código generado.
+
+**Semana 1 · Entrada 14**
+**Prompt usado:** "Genera un código con pytest para generar 2 pruebas por cada uno de los 2 principios ISP y DIP, sigue la estructura trabajada con anterioridad, comenta las lineas para mejorar la comprensión."
+
+**Qué produjo la IA:** Copilot generó el código de prueba con los 4 tests en total, se hicieron las pruebas correspondientes en la terminal y resultaron positivas.
+
+**Mi decisión:** Se le aplicaron las pruebas dentro de pytest junto con la lectura de su código, y se aceptó dentro de la prueba.
