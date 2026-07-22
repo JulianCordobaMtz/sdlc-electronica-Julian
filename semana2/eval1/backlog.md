@@ -174,6 +174,68 @@ para garantizar que el sistema es estable y levanta las alertas correctamente co
 
 ---
 
+## US-08: Validación de rango físico y detección de sensores descalibrados
+Como técnico de mantenimiento,
+quiero que el sistema identifique sensores que reportan valores fuera del rango físicamente posible en una bodega,
+para prevenir alertas falsas y detectar hardware dañado o descalibrado.
+
+* **Prioridad:** Must Have
+* **Estimación:** 3 puntos
+* **Rango operativo esperado:** Temperatura [-10°C, 50°C], Humedad [0%, 100%]
+
+**Scenario: Rechazo de lectura con temperatura imposible**
+* **Given** el validador de rango físico configurado
+* **When** un sensor reporta una lectura de -50°C o 80°C
+* **Then** el sistema marca la lectura como "INVÁLIDA"
+* **And** registra el ID del sensor como "DESCALIBRADO"
+* **And** NO dispara alarma de anomalía para esa lectura
+
+**Scenario: Detección de sensor dañado tras múltiples lecturas inválidas**
+* **Given** un sensor que ha reportado 5 lecturas consecutivas fuera de rango
+* **When** se procesa la 5ª lectura inválida
+* **Then** el sistema cambia el estado del sensor a "OFFLINE_SUSPECTED"
+* **And** emite una alerta de mantenimiento requerido
+* **And** excluye ese sensor de lecturas futuras hasta recalibración manual
+
+**Scenario: Recuperación de sensor mediante recalibración**
+* **Given** un sensor en estado "OFFLINE_SUSPECTED"
+* **When** el técnico ejecuta `recalibrar_sensor("BODEGA-05")`
+* **Then** el sensor vuelve a estado "ACTIVO"
+* **And** se registra timestamp y usuario de la recalibración
+
+---
+
+## US-10: Gestión dinámica de umbrales de anomalías sin reinicio
+Como supervisor operativo,
+quiero poder cambiar los umbrales de temperatura y humedad en tiempo de ejecución,
+para adaptar la sensibilidad del sistema a cambios estacionales o condiciones inesperadas sin detener el monitoreo.
+
+* **Prioridad:** Must Have
+* **Estimación:** 3 puntos
+* **Validación:** Los nuevos umbrales deben ser coherentes (T_min < T_max, H_min < H_max)
+
+**Scenario: Actualización de umbrales en tiempo de ejecución**
+* **Given** el detector configurado con T_umbral=35.0°C, H_umbral=80.0%
+* **When** se ejecuta `actualizar_umbrales(T=32.0, H=75.0)`
+* **Then** el cambio aplica inmediatamente a lecturas posteriores
+* **And** no afecta el procesamiento de la lectura actual ni las anteriores
+* **And** se registra el cambio en audit log con timestamp y usuario
+
+**Scenario: Rechazo de umbrales incoherentes**
+* **Given** el sistema con umbrales actuales T=35.0, H=80.0
+* **When** se intenta ejecutar `actualizar_umbrales(T_min=40.0, T_max=30.0)`
+* **Then** el sistema rechaza la actualización
+* **And** retorna error: "T_min debe ser menor que T_max"
+* **And** mantiene los umbrales previos sin cambios
+
+**Scenario: Auditoría de cambios de configuración**
+* **Given** múltiples cambios de umbral realizados durante el día
+* **When** se consulta el historial con `obtener_audit_log_umbrales()`
+* **Then** se retorna lista con: timestamp, usuario, valores antiguos, valores nuevos
+* **And** cada registro es inmutable
+
+---
+
 ## US-09: Persistencia histórica completa en Base de Datos
 Como analista de datos,
 quiero que todas las lecturas se guarden en una base de datos local,
