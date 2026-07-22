@@ -107,3 +107,12 @@ Prompt usado: "Analiza las clases vacías en este archivo recorder.py, básate e
 **Qué produjo la IA:** Copilot generó el código de prueba con los 4 tests en total, se hicieron las pruebas correspondientes en la terminal y resultaron positivas.
 
 **Mi decisión:** Se le aplicaron las pruebas dentro de pytest junto con la lectura de su código, y se aceptó dentro de la prueba.
+
+
+## Semana 2 · Entrada 1
+**Prompt usado:** "Quiero que audites mis user stories con criterios Gherkin, se supone que se hicieron para un sistema de monitoreo IOT para bodega industrial, las siguientes preguntas te servirán para descartar o decirme que corregir: ¿es verificable? ¿es ambiguo? ¿qué caso borde falta? 
+Usa esos criterios para elegir alguno o algunos de los 10 que estan escritos y dime el porque de tu decisión."
+
+**Qué produjo la IA:** Copilot revisó los 10 user stories, haciendo uso de los criterios Gherkin para revisar uno por uno y decidir si eran o no aceptables, me dijo que 2 eran descartables por no cumplir con los requisitos y que otros 4 necesitaban ciertos ajustes por ambiguedades, imprecisiones, no ser verificables y faltar el caso de error.
+
+**Mi decisión:** Se solició que efectuara los cambios en el archivo, agregando los 2 casos según sus criterios que eran descartables por unos que si sean aceptables y modificar las irregularidades de los otros 4.
