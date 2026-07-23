@@ -15,11 +15,9 @@ from parsers import MessageParser  # Interfaz para crear mocks de parsers
 # MÓDULO DE PRUEBAS (MOCK)
 class DummyParser(MessageParser):
     """Mock de parser para pruebas.
-
     - `can_parse` devuelve True solo para la secuencia exacta b'HOLA'.
     - `parse` devuelve un diccionario fijo que las pruebas esperan.
-    Esto permite verificar que `UARTDevice` delega correctamente en el parser.
-    """
+    Esto permite verificar que `UARTDevice` delega correctamente en el parser."""
     def can_parse(self, raw_data: bytes) -> bool:
         # Simula reconocimiento de trama: True únicamente para b'HOLA'
         return raw_data == b"HOLA"
@@ -30,11 +28,9 @@ class DummyParser(MessageParser):
 
 # PRUEBAS PARA EL MÓDULO DE DEVICE
 def test_device_inicializacion():
-    """
-    Prueba 1: Verifica que el controlador central guarde bien 
+    """Prueba 1: Verifica que el controlador central guarde bien 
     su configuración (UartConfig) y sus decodificadores al arrancar,
-    y que su estado inicial de conexión sea False.
-    """
+    y que su estado inicial de conexión sea False."""
     # Preparación: crear configuración y dispositivo con parser mock
     cfg = UartConfig()
     device = UARTDevice(config=cfg, parsers=[DummyParser()])
@@ -48,10 +44,8 @@ def test_device_inicializacion():
 
 
 def test_device_conexion():
-    """
-    Prueba 2: Verifica que al llamar a connect(), el estado 
-    interno _is_connected cambie a True sin lanzar errores.
-    """
+    """Prueba 2: Verifica que al llamar a connect(), el estado 
+    interno _is_connected cambie a True sin lanzar errores."""
     # Preparación y acción: conectar el dispositivo
     cfg = UartConfig()
     device = UARTDevice(config=cfg, parsers=[DummyParser()])
@@ -74,11 +68,9 @@ def test_device_error_si_lee_sin_conectar():
 
 
 def test_device_decodificacion_exitosa():
-    """
-    Prueba 4: Verifica que si inyectamos el DummyParser, conectamos 
+    """Prueba 4: Verifica que si inyectamos el DummyParser, conectamos 
     el puerto y le mandamos los bytes b'HOLA', el controlador orqueste 
-    todo correctamente y nos devuelva el diccionario esperado.
-    """
+    todo correctamente y nos devuelva el diccionario esperado."""
     # Conectar y pasar una trama que el DummyParser reconoce
     cfg = UartConfig()
     device = UARTDevice(config=cfg, parsers=[DummyParser()])
@@ -89,11 +81,9 @@ def test_device_decodificacion_exitosa():
     assert resultado == {"mensaje": "saludo_recibido"}
 
 def test_device_decodificacion_fallida():
-    """
-    Prueba 5: Verifica que si inyectamos el DummyParser, conectamos
+    """Prueba 5: Verifica que si inyectamos el DummyParser, conectamos
     el puerto y le mandamos datos basura (ej. b'BASURA'), el controlador 
-    lance un ValueError porque ningún parser lo reconoce.
-    """
+    lance un ValueError porque ningún parser lo reconoce."""
     # Conectar y pasar una trama no reconocida: esperamo ValueError
     cfg = UartConfig()
     device = UARTDevice(config=cfg, parsers=[DummyParser()])

@@ -1,23 +1,11 @@
-from sensor_reading import SensorReading
-
 class AlertManager:
-    def generar_alerta(self, lectura: SensorReading, tipo_anomalia: str) -> str:
+    def __init__(self) -> None:
+        self.ultima_alerta = ""
+
+    def enviar_alerta(self, sensor_id: str, motivo: str) -> bool:
         """
-        Genera un mensaje de alerta estandarizado basado en una lectura anómala.
+        Simula el envío de una alerta y guarda el registro.
         """
-        timestamp_str = lectura.timestamp.strftime("%Y-%m-%d %H:%M:%S")
-        
-        # Seleccionamos el valor correcto dependiendo del tipo de anomalía
-        if tipo_anomalia == "TEMPERATURA":
-            valor = lectura.temperatura
-        else:
-            valor = lectura.humedad
-            
-        mensaje = (
-            f"*** ALERTA {tipo_anomalia} ***\n"
-            f"Sensor: {lectura.sensor_id}\n"
-            f"Valor registrado: {valor}\n"
-            f"Fecha/Hora: {timestamp_str}\n"
-            f"***************************"
-        )
-        return mensaje
+        self.ultima_alerta = f"ALERTA: Sensor {sensor_id} - {motivo}"
+        print(self.ultima_alerta)
+        return True
