@@ -110,9 +110,28 @@ Prompt usado: "Analiza las clases vacías en este archivo recorder.py, básate e
 
 
 ## Semana 2 · Entrada 1
-**Prompt usado:** "Quiero que audites mis user stories con criterios Gherkin, se supone que se hicieron para un sistema de monitoreo IOT para bodega industrial, las siguientes preguntas te servirán para descartar o decirme que corregir: ¿es verificable? ¿es ambiguo? ¿qué caso borde falta? 
+**Prompt usado:** "Quiero que audites mis user stories con criterios Gherkin, se supone que se hicieron para un sistema de monitoreo IOT para bodega industrial. Las primeras 3 deben ser de núcleo con las siguientes características: SensorReading, AnomalyDetector (umbrales inyectados, no hardcodeados) y AlertManager (estrategia abstracta + Console y File) para tener una cobertura del 80% mínimo en el test. Las siguientes preguntas te servirán para descartar o decirme que corregir: ¿es verificable? ¿es ambiguo? ¿qué caso borde falta? 
 Usa esos criterios para elegir alguno o algunos de los 10 que estan escritos y dime el porque de tu decisión."
 
 **Qué produjo la IA:** Copilot revisó los 10 user stories, haciendo uso de los criterios Gherkin para revisar uno por uno y decidir si eran o no aceptables, me dijo que 2 eran descartables por no cumplir con los requisitos y que otros 4 necesitaban ciertos ajustes por ambiguedades, imprecisiones, no ser verificables y faltar el caso de error.
 
 **Mi decisión:** Se solició que efectuara los cambios en el archivo, agregando los 2 casos según sus criterios que eran descartables por unos que si sean aceptables y modificar las irregularidades de los otros 4.
+
+## Semana 2 · Entrada 2
+**Prompt usado:** "Necesito realizar una implementación TDD con las primeras 3 historias núcleo del backlog las cuales son las siguientes:SensorReading, AnomalyDetector (umbrales inyectados, no hardcodeados) y AlertManager (estrategia abstracta + Console y File), por lo cual, debo crear primero el archivo test de cada una de las 3 historias para realizar la prueba RED y posteriormente elaborar el bloque de código que sirva para accionar el GREEN del mismo código. Por lo que tu tarea es ayudarme a crear con guías esta implementación TDD, escribiendo el código con firmas que me logren ayudar a entender como funciona."
+
+**Qué produjo la IA:** Estructuró una guía paso a paso del ciclo TDD para las tres historias principales. Generó los esqueletos de las pruebas unitarias utilizando pytest, enfocándose en definir las firmas de los métodos, las aserciones esperadas y la inyección de dependencias (como pasar los umbrales al constructor del detector y definir la clase abstracta para las estrategias de alerta). Proporcionó los archivos de prueba iniciales para forzar la Fase RED, dejando el código de producción solo con la estructura básica y comentarios guía.
+
+**Mi decisión:** Decidí seguir la metodología de forma estricta. Primero, integré los archivos de prueba en mi entorno local y los ejecuté para confirmar que fallaran por la falta de implementación (Fase RED). Posteriormente, utilicé las firmas y la estructura proporcionada por la IA como mapa para desarrollar la lógica interna de las clases SensorReading, AnomalyDetector y AlertManager por mi cuenta, iterando el código hasta lograr que todas las aserciones pasaran exitosamente (Fase GREEN).
+
+Aquí tienes una propuesta para la **Entrada 3**, inventando un *prompt* que mantiene el mismo nivel de detalle técnico que usaste en la entrada anterior, pero enfocado en la otra parte crucial de esta Semana 2: la configuración del tablero ágil en GitHub y la organización del Sprint.
+
+Copia y pega esto en tu archivo:
+
+## Semana 2 · Entrada 3
+
+**Prompt usado:** "Para documentar correctamente mi Sprint 1 y cumplir con la rúbrica dada, necesito configurar mi tablero Kanban en GitHub Projects. Tengo mi archivo de Product Backlog con 10 historias de usuario y he seleccionado 5 para este sprint. Tu tarea es explicarme cómo debo estructurar las columnas (Product Backlog, Sprint, In Progress, Review, Done) y cuál es la forma correcta de trasladar mis historias redactadas en texto plano a tarjetas de GitHub para que la evidencia quede correctamente documentada y refleje mi avance con el código del núcleo."
+
+**Qué produjo la IA:** Proporcionó una guía detallada sobre la configuración de GitHub Projects, aclarando que los archivos .md locales no se sincronizan automáticamente con la vista web. Recomendó utilizar la función de "Draft Issues" para transcribir los títulos exactos del backlog. Además, definió la distribución lógica de las tarjetas: indicó que las historias no seleccionadas debían ir a la columna "Product Backlog", las pendientes de desarrollo a "Sprint", y las historias de SensorReading, AnomalyDetector y AlertManager a la columna "Done".
+
+**Mi decisión:** Decidí aplicar la estructura sugerida creando manualmente las tarjetas directamente en el tablero. Verifiqué que los títulos de las tarjetas coincidieran letra por letra con mi archivo original para no mezclar tareas técnicas con historias de usuario. Finalmente, acomodé las tarjetas en las columnas correspondientes, asegurando que el tablero reflejara exactamente el estado actual de mi repositorio.
