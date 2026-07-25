@@ -205,6 +205,22 @@ para prevenir alertas falsas y detectar hardware dañado o descalibrado.
 
 ---
 
+## US-09: Persistencia histórica completa en Base de Datos
+Como analista de datos,
+quiero que todas las lecturas se guarden en una base de datos local,
+para poder generar reportes mensuales del clima de la bodega.
+
+* **Prioridad:** Won't Have
+* **Estimación:** 8 puntos
+
+**Scenario: Guardado de historial completo**
+* **Given** la conexión a SQLite establecida
+* **When** llega cualquier tipo de lectura
+* **Then** se ejecuta un INSERT en la tabla de historial
+* **And** la base de datos se mantiene optimizada
+
+---
+
 ## US-10: Gestión dinámica de umbrales de anomalías sin reinicio
 Como supervisor operativo,
 quiero poder cambiar los umbrales de temperatura y humedad en tiempo de ejecución,
@@ -234,18 +250,3 @@ para adaptar la sensibilidad del sistema a cambios estacionales o condiciones in
 * **Then** se retorna lista con: timestamp, usuario, valores antiguos, valores nuevos
 * **And** cada registro es inmutable
 
----
-
-## US-09: Persistencia histórica completa en Base de Datos
-Como analista de datos,
-quiero que todas las lecturas se guarden en una base de datos local,
-para poder generar reportes mensuales del clima de la bodega.
-
-* **Prioridad:** Won't Have
-* **Estimación:** 8 puntos
-
-**Scenario: Guardado de historial completo**
-* **Given** la conexión a SQLite establecida
-* **When** llega cualquier tipo de lectura
-* **Then** se ejecuta un INSERT en la tabla de historial
-* **And** la base de datos se mantiene optimizada
