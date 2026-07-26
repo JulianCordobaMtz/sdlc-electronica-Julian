@@ -1,137 +1,581 @@
-## Semana 1 · Entrada 1
-**Prompt usado:** "proponme otras 5 funciones puras sobre reading con type hints, observa las que he agregado y anota pequeños comentarios arriba de cada una para saber lo que hacen, que sean similares a las que propuse originalmente"
+# Bitácora de uso de IA
 
-**Qué produjo la IA:** Copilot generó un bloque con 5 funciones lógicas y matemáticas, respetando correctamente los tipos de datos y la estructura propuesta
+> Registro de las interacciones con herramientas de inteligencia artificial durante el curso.
+> Cada entrada documenta el prompt utilizado, la propuesta generada por la IA, la decisión tomada frente a esa propuesta y la justificación detrás de esa decisión.
 
-**Mi decisión:** Acepté 2 de las 5 funciones propuestas, debido a que de las otras 3, no conocía del todo su funcionamiento o aplicación y creo que no iba a terminar de comprender en caso de que tuviera que explicar el verdadero funcionamiento de la misma función.
-Estas fueron las rechazadas:
-# Calcula el promedio entre dos lecturas del mismo sensor/tipo (pura)
-```python
-def average_readings(a: Reading, b: Reading) -> Reading:
-    if a.sensor_id != b.sensor_id or a.sensor_type != b.sensor_type:
-        # Si difieren, devuelve la primera sin modificar (no muta nada)
-        return a
-    avg = (a.value + b.value) / 2.0
-    return Reading(sensor_id=a.sensor_id, value=avg, sensor_type=a.sensor_type)
-```
-# Limitar el valor de la lectura a un rango específico
-```python
-def clamp_reading(r: Reading, min_v: float, max_v: float) -> Reading:
-    clamped = max(min_v, min(max_v, r.value))
-    return Reading(sensor_id=r.sensor_id, value=clamped, sensor_type=r.sensor_type)
-```
-## Semana 1· Entrada 2
-**Prompt usado:** "quiero que construyas 4 test fsm del fsm demo que se construyó dentro de la carpeta de martes14, estado inicial, transición RED→GREEN, ciclo completo que vuelve a RED, y conteo de ciclos."
+---
 
-**Qué produjo la IA:** Copilot generó un código con los 4 tests, sin embargo, los produjo con unnitest, que vienen siendo una librería más antigua, siendo más compleja a mi parecer y no corresponde a lo que estoy viendo.
-```python
-import unittest
-from fsm_demo import TrafficLightFSM, TrafficLightState
-```
+## Semana 1
 
-**Mi decisión:** Rechazé el trabajo realizado por la IA, le solicité de nuevo la creación de los 4 tests pero haciendo uso de pytest, ya que esa fue la instrucción original.
+### Entrada 1 — Funciones puras adicionales sobre `Reading`
 
-## Semana 1· Entrada 3
-**Prompt usado:** "Vuelve a construir el código pero esta vez usando pytest y generando los 4 tests"
+#### Objetivo
 
-**Qué produjo la IA:** Copilot generó de nuevo los 4 tests, esta vez usando pytest
+Ampliar el módulo de sensores con nuevas funciones puras que operaran sobre el objeto `Reading`, evaluando cuáles de ellas se comprendían lo suficiente como para incorporarlas al proyecto.
 
-**Mi decisión:** Acepté el trabajo generado por la IA, aunque va a estar sujeta a cambios dependiendo el análisis que se le de al tema con respecto a las FSM.
+#### Herramienta utilizada
 
-## Semana 1· Entrada 4
-**Prompt usado:** "Necesito que generes 2 tests por cada principio de S, O y L, del archivo solid_srp_ocp_lsp.py dentro de carpeta Miercoles 15, por lo que serán 6 tests al final, uno por cada ejemplo, lo harás con pytest"
+`GitHub Copilot`
 
-**Qué produjo la IA:** Copilot generó de nuevo los tests, 2 por cada principio, para validar que el diseño de los 6 casos, agrupandolos en 3 clases distintas, inyectando valores simulados de sensores.
+#### Prompt utilizado
 
-**Mi decisión:** Acepté el trabajo que hizo, dado que si cumplia con lo solicitado y sirvió para comprobar los 3 primeros principios de la arquitectura SOLID. Aunque tuve que comentar el código debido a que no todo lo lograba comprender.
+> proponme otras 5 funciones puras sobre reading con type hints, observa las que he agregado y anota pequeños comentarios arriba de cada una para saber lo que hacen, que sean similares a las que propuse originalmente
 
-## Semana 1· Entrada 6
-**Prompt usado:** "Quiero que construyas un código donde se incluyan los 2 últimos principios de SOLID, los cuales vienen siendo el principio de segregación de interfaces y el principio de sustitución de LISKOV, quiero que la estructura sea que por cada principio sea uno bueno y otro malo, estructurado hacia el ámbito de sensores como los demás trabajos"
+#### Propuesta de la IA
 
-**Qué produjo la IA:** Copilot generó el código con los últimos 2 principios, con los comentarios respectivos para comprender mejor las intenciones de cada sección, de todas formas se hizo un análisis completo.
+Copilot generó un bloque con 5 funciones puras lógicas y matemáticas relacionadas con `Reading`, respetando correctamente los tipos de datos y el estilo de las funciones ya existentes en el archivo.
 
-**Mi decisión:** Acepté el código generado, se aplicó un estudio aparte además de lo que vienen siendo estos 2 conceptos y se buscaron más ejemplos para compararlos para ver si lo que se había integrado era lo correcto.
+#### Decisión y cambios realizados
 
-## Semana 1 · Entrada 7
-**Prompt usado:** "Tengo estas clases vacías en Python para decodificar protocolos seriales. Basándote en los docstrings, sugiéreme el código para reemplazar los pass con la lógica necesaria para validar y leer los bytes crudos."
+Se aceptaron únicamente 2 de las 5 funciones propuestas. Las otras 3 se rechazaron, entre ellas:
 
-**Qué produjo la IA:** Copilot generó la lógica interna de las clases reemplazando los pass, implementando el código necesario para validar y decodificar los bytes crudos en base a las instrucciones de los docstrings.
+- `average_readings`, que promedia dos lecturas del mismo sensor.
+- `clamp_reading`, que limita el valor de una lectura a un rango específico.
 
-**Mi decisión:** Acepté el uso de este código debido a que coincidía con el uso de los principios SRP e inmutabilidad que se pidieron.
+#### Justificación
 
-## Semana 1 · Entrada 8
-**Prompt usado:** "Analiza las clases vacías en este archivo(device.py) cumpliendo el principio DIP, básate en los docstrings para sugerir el código que reemplace los pass para desarrollar un microncontrolador central, reemplaza el código y aplica los cambios, además de documentarlo con comentarios."
+No se comprendía del todo el funcionamiento ni la aplicación real de esas 3 funciones, y de haberse incorporado no habría podido explicar con seguridad su comportamiento. Se priorizó conservar únicamente el código que se domina.
 
-**Qué produjo la IA:** Copilot generó el código para el microcontrolador central respetando el principio de Inversión de Dependencias (DIP). Sustituyó los pass con la lógica correspondiente y agregó comentarios documentando el desarrollo. Pero con 2 errores, el primero debido a que tuvo una inscosistencia en las clases de connect, ya que especificaba la impresión de un puerto serial, sin embargo, en el apartado de configuración, nunca se asignó la creación de un puerto, ya que no venía en la tabla compartida de información, así que se le solicitó que lo cambiara apegado al config. El segundo error fue que puso en mayúsculas UARTConfig, siendo que estaba escrito UartConfig.
+---
 
-**Mi decisión:** Se modificó este código solicitandole que eliminara esto, además de manualmente editar el texto de UARTConfig a UartConfig.
+### Entrada 2 — Primer intento de pruebas para la FSM (rechazado por usar `unittest`)
 
-## Semana 1 · Entrada 9
-Prompt usado: "Analiza las clases vacías en este archivo recorder.py, básate en los docstrings para sugerir el código que reemplace los pass para desarrollar el modulo de memoria, recuerda revisar el nombre de los archivos para las importaciones correctas y comentalo respectivamente, incluye los cambios en el archivo"
+#### Objetivo
 
-**Qué produjo la IA:** Copilot generó el código para el módulo de memoria en recorder.py guiándose por los docstrings proporcionados. Manejó correctamente las importaciones de los archivos y agregó los comentarios respectivos a las funciones.
+Generar 4 pruebas para el FSM (máquina de estados finitos) construido en la carpeta `martes14`: estado inicial, transición RED→GREEN, ciclo completo de vuelta a RED y conteo de ciclos.
 
-**Mi decisión:** Se conservó el genero proporcionado, ya que coincide con lo solicitado, mantiene los principios SRP y se enlaza correctamente.
+#### Herramienta utilizada
 
-## Semana 1 · Entrada 10
-**Prompt usado:** "Revisa este archivo, aquí quiero construir el punto de prueba con pytest para el modulo de decodificadores que se construyo en el archivo parsers.py, siguiendo los docstrings para su construcción y comentalo respectivamente. Incluye los cambios en el archivo"
+`GitHub Copilot`
 
-**Qué produjo la IA:** Copilot generó los tests unitarios utilizando pytest para el módulo de decodificadores, estructurando las pruebas a partir de los docstrings y documentando cada bloque.
+#### Prompt utilizado
 
-**Mi decisión:** El código fue puesto a prueba con pytest y las respuestas fueron exitosas, se comprobó su correcto funcionamiento.
+> quiero que construyas 4 test fsm del fsm demo que se construyó dentro de la carpeta de martes14, estado inicial, transición RED→GREEN, ciclo completo que vuelve a RED, y conteo de ciclos.
 
-## Semana 1 · Entrada 11
-**Prompt usado:** "Revisa este archivo, aquí quiero construir el punto de prueba con pytest para el modulo de configuración, que se construyó en el archivo config.py, siguiendo los docstrings para su construcción y comentalo respectivamente. Incluye los cambios en el archivo"
+#### Propuesta de la IA
 
-**Qué produjo la IA:** Copilot generó las pruebas correspondientes con pytest para validar el módulo de configuración, incorporando los comentarios solicitados de acuerdo con los docstrings.
+Copilot generó las 4 pruebas solicitadas, pero utilizando la librería `unittest` en lugar de `pytest`.
 
-**Mi decisión:** El código generado pasó exitosamente las pruebas, por lo tanto, revisando su estructura se concluyó que era apto.
+#### Decisión y cambios realizados
 
-## Semana 1 · Entrada 12
-**Prompt usado:** "Revisa este archivo, aquí quiero construir el punto de prueba con pytest para el modulo de device, que se construyó en el archivo device.py, siguiendo los docstrings para su construcción y comentalo respectivamente. Incluye los cambios en el archivo."
+Se rechazó por completo la propuesta y se solicitó rehacer el ejercicio usando `pytest`.
 
-**Qué produjo la IA:** Copilot generó el bloque de pruebas con pytest para auditar el funcionamiento del controlador central device.py, siguiendo las instrucciones de los docstrings e incluyendo la documentación necesaria.
+#### Justificación
 
-**Mi decisión:** El código generado fue puesto a prueba con pytest y los resultados fueron positivos, por lo que se leyeron los comentarios generados y fue aceptado para el trabajo.
+`unittest` es una librería más antigua y, en comparación con `pytest`, más compleja de leer; además no correspondía al framework que se estaba trabajando en el curso hasta ese momento.
 
-## Semana 1 · Entrada 13
-**Prompt usado:** "revisa este archivo, aquí quiero construir el punto de prueba con pytest para el modulo de memoria, que se construyó en el archivo recorder.py, siguiendo los docstrings para su construcción y comentalo respectivamente. Incluye los cambios en el archivo."
+---
 
-**Qué produjo la IA:** Copilot generó los escenarios de prueba con pytest para el módulo de almacenamiento recorder.py, reemplazando los esqueletos vacíos con la lógica de validación correspondiente y sus respectivos comentarios.
+### Entrada 3 — Reconstrucción de pruebas de la FSM con `pytest`
 
-**Mi decisión:** Se le aplicaron las pruebas dentro de pytest junto con la lectura de su código y resultaron las respuestas positivas,por lo que se procede a almacenar el código generado.
+#### Objetivo
 
-## Semana 1 · Entrada 14
-**Prompt usado:** "Genera un código con pytest para generar 2 pruebas por cada uno de los 2 principios ISP y DIP, sigue la estructura trabajada con anterioridad, comenta las lineas para mejorar la comprensión."
+Reintentar la generación de las 4 pruebas del FSM, ahora utilizando `pytest`.
 
-**Qué produjo la IA:** Copilot generó el código de prueba con los 4 tests en total, se hicieron las pruebas correspondientes en la terminal y resultaron positivas.
+#### Herramienta utilizada
 
-**Mi decisión:** Se le aplicaron las pruebas dentro de pytest junto con la lectura de su código, y se aceptó dentro de la prueba.
+`GitHub Copilot`
 
+#### Prompt utilizado
 
-## Semana 2 · Entrada 1
-**Prompt usado:** "Quiero que audites mis user stories con criterios Gherkin, se supone que se hicieron para un sistema de monitoreo IOT para bodega industrial. Las primeras 3 deben ser de núcleo con las siguientes características: SensorReading, AnomalyDetector (umbrales inyectados, no hardcodeados) y AlertManager (estrategia abstracta + Console y File) para tener una cobertura del 80% mínimo en el test. Las siguientes preguntas te servirán para descartar o decirme que corregir: ¿es verificable? ¿es ambiguo? ¿qué caso borde falta? 
-Usa esos criterios para elegir alguno o algunos de los 10 que estan escritos y dime el porque de tu decisión."
+> Vuelve a construir el código pero esta vez usando pytest y generando los 4 tests
 
-**Qué produjo la IA:** Copilot revisó los 10 user stories, haciendo uso de los criterios Gherkin para revisar uno por uno y decidir si eran o no aceptables, me dijo que 2 eran descartables por no cumplir con los requisitos y que otros 4 necesitaban ciertos ajustes por ambiguedades, imprecisiones, no ser verificables y faltar el caso de error.
+#### Propuesta de la IA
 
-**Mi decisión:** Se solició que efectuara los cambios en el archivo, agregando los 2 casos según sus criterios que eran descartables por unos que si sean aceptables y modificar las irregularidades de los otros 4.
+Copilot generó nuevamente las 4 pruebas, esta vez con `pytest`.
 
-## Semana 2 · Entrada 2
-**Prompt usado:** "Necesito realizar una implementación TDD con las primeras 3 historias núcleo del backlog las cuales son las siguientes:SensorReading, AnomalyDetector (umbrales inyectados, no hardcodeados) y AlertManager (estrategia abstracta + Console y File), por lo cual, debo crear primero el archivo test de cada una de las 3 historias para realizar la prueba RED y posteriormente elaborar el bloque de código que sirva para accionar el GREEN del mismo código. Por lo que tu tarea es ayudarme a crear con guías esta implementación TDD, escribiendo el código con firmas que me logren ayudar a entender como funciona."
+#### Decisión y cambios realizados
 
-**Qué produjo la IA:** Estructuró una guía paso a paso del ciclo TDD para las tres historias principales. Generó los esqueletos de las pruebas unitarias utilizando pytest, enfocándose en definir las firmas de los métodos, las aserciones esperadas y la inyección de dependencias (como pasar los umbrales al constructor del detector y definir la clase abstracta para las estrategias de alerta). Proporcionó los archivos de prueba iniciales para forzar la Fase RED, dejando el código de producción solo con la estructura básica y comentarios guía.
+Se aceptó el trabajo generado, dejando abierta la posibilidad de ajustarlo conforme avanzara el análisis del tema de las FSM.
 
-**Mi decisión:** Decidí seguir la metodología de forma estricta. Primero, integré los archivos de prueba en mi entorno local y los ejecuté para confirmar que fallaran por la falta de implementación (Fase RED). Posteriormente, utilicé las firmas y la estructura proporcionada por la IA como mapa para desarrollar la lógica interna de las clases SensorReading, AnomalyDetector y AlertManager por mi cuenta, iterando el código hasta lograr que todas las aserciones pasaran exitosamente (Fase GREEN).
+#### Justificación
 
-Aquí tienes una propuesta para la **Entrada 3**, inventando un *prompt* que mantiene el mismo nivel de detalle técnico que usaste en la entrada anterior, pero enfocado en la otra parte crucial de esta Semana 2: la configuración del tablero ágil en GitHub y la organización del Sprint.
+La propuesta cumplió con el requisito explícito de usar `pytest`, que era el framework correcto para el curso.
 
-Copia y pega esto en tu archivo:
+---
 
-## Semana 2 · Entrada 3
+### Entrada 4 — Pruebas para SRP, OCP y LSP
 
-**Prompt usado:** "Para documentar correctamente mi Sprint 1 y cumplir con la rúbrica dada, necesito configurar mi tablero Kanban en GitHub Projects. Tengo mi archivo de Product Backlog con 10 historias de usuario y he seleccionado 5 para este sprint. Tu tarea es explicarme cómo debo estructurar las columnas (Product Backlog, Sprint, In Progress, Review, Done) y cuál es la forma correcta de trasladar mis historias redactadas en texto plano a tarjetas de GitHub para que la evidencia quede correctamente documentada y refleje mi avance con el código del núcleo."
+#### Objetivo
 
-**Qué produjo la IA:** Proporcionó una guía detallada sobre la configuración de GitHub Projects, aclarando que los archivos .md locales no se sincronizan automáticamente con la vista web. Recomendó utilizar la función de "Draft Issues" para transcribir los títulos exactos del backlog. Además, definió la distribución lógica de las tarjetas: indicó que las historias no seleccionadas debían ir a la columna "Product Backlog", las pendientes de desarrollo a "Sprint", y las historias de SensorReading, AnomalyDetector y AlertManager a la columna "Done".
+Generar 2 pruebas por cada uno de los principios S, O y L de SOLID (6 en total) a partir del archivo `solid_srp_ocp_lsp.py`.
 
-**Mi decisión:** Decidí aplicar la estructura sugerida creando manualmente las tarjetas directamente en el tablero. Verifiqué que los títulos de las tarjetas coincidieran letra por letra con mi archivo original para no mezclar tareas técnicas con historias de usuario. Finalmente, acomodé las tarjetas en las columnas correspondientes, asegurando que el tablero reflejara exactamente el estado actual de mi repositorio.
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Necesito que generes 2 tests por cada principio de S, O y L, del archivo solid_srp_ocp_lsp.py dentro de carpeta Miercoles 15, por lo que serán 6 tests al final, uno por cada ejemplo, lo harás con pytest
+
+#### Propuesta de la IA
+
+Copilot generó los 6 tests, agrupados en 3 clases distintas (una por principio), inyectando valores simulados de sensores para validar cada diseño.
+
+#### Decisión y cambios realizados
+
+Se aceptó el trabajo, aunque fue necesario comentar manualmente varias líneas del código porque no todo se comprendía a primera vista.
+
+#### Justificación
+
+Los tests cumplían con lo solicitado y sirvieron para comprobar el comportamiento de los 3 primeros principios de la arquitectura SOLID.
+
+---
+
+### Entrada 5 — Pruebas para ISP y LSP (ejemplos buenos y malos)
+
+#### Objetivo
+
+Cubrir los 2 principios restantes de SOLID —segregación de interfaces (ISP) y sustitución de Liskov (LSP)— con un ejemplo "bueno" y uno "malo" por principio, en el contexto de sensores.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Quiero que construyas un código donde se incluyan los 2 últimos principios de SOLID, los cuales vienen siendo el principio de segregación de interfaces y el principio de sustitución de LISKOV, quiero que la estructura sea que por cada principio sea uno bueno y otro malo, estructurado hacia el ámbito de sensores como los demás trabajos
+
+#### Propuesta de la IA
+
+Copilot generó el código con los 2 principios restantes, incluyendo comentarios para comprender mejor la intención de cada sección.
+
+#### Decisión y cambios realizados
+
+Se aceptó el código generado.
+
+#### Justificación
+
+Se complementó con estudio adicional por fuera de la IA y con la búsqueda de más ejemplos externos, para comparar y confirmar que lo integrado era correcto.
+
+---
+
+### Entrada 6 — Decodificación de protocolos seriales
+
+#### Objetivo
+
+Reemplazar los `pass` de un conjunto de clases vacías para decodificar protocolos seriales, a partir de la información contenida en sus docstrings.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Tengo estas clases vacías en Python para decodificar protocolos seriales. Basándote en los docstrings, sugiéreme el código para reemplazar los pass con la lógica necesaria para validar y leer los bytes crudos.
+
+#### Propuesta de la IA
+
+Copilot generó la lógica interna de las clases, reemplazando los `pass` con el código necesario para validar y decodificar los bytes crudos, según lo indicado en los docstrings.
+
+#### Decisión y cambios realizados
+
+Se aceptó el código generado.
+
+#### Justificación
+
+Coincidía con el uso de los principios de responsabilidad única (SRP) e inmutabilidad que se pedían para ese ejercicio.
+
+---
+
+### Entrada 7 — Microcontrolador central (`device.py`) respetando DIP
+
+#### Objetivo
+
+Implementar el microcontrolador central en `device.py` respetando el principio de Inversión de Dependencias (DIP), a partir de sus docstrings.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Analiza las clases vacías en este archivo(device.py) cumpliendo el principio DIP, básate en los docstrings para sugerir el código que reemplace los pass para desarrollar un microncontrolador central, reemplaza el código y aplica los cambios, además de documentarlo con comentarios.
+
+#### Propuesta de la IA
+
+Copilot generó el código del microcontrolador central respetando DIP, sustituyó los `pass` con la lógica correspondiente y documentó el desarrollo con comentarios. La propuesta incluyó, sin embargo, 2 errores:
+
+1. Una inconsistencia en la clase de conexión: imprimía un puerto serial que nunca llegaba a configurarse, ya que no existía en la tabla de configuración compartida.
+2. El nombre `UARTConfig` en mayúsculas, cuando el nombre correcto en el proyecto era `UartConfig`.
+
+#### Decisión y cambios realizados
+
+Se solicitó a la IA corregir el primer error apegándose a la configuración real, y se corrigió manualmente el segundo (`UARTConfig` → `UartConfig`).
+
+#### Justificación
+
+Ambos errores generaban una inconsistencia entre lo documentado y lo realmente configurado en el proyecto, por lo que era necesario resolverlos antes de aceptar el código.
+
+---
+
+### Entrada 8 — Módulo de memoria (`recorder.py`)
+
+#### Objetivo
+
+Implementar el módulo de memoria en `recorder.py`, a partir de sus docstrings y respetando las importaciones correctas del proyecto.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Analiza las clases vacías en este archivo recorder.py, básate en los docstrings para sugerir el código que reemplace los pass para desarrollar el modulo de memoria, recuerda revisar el nombre de los archivos para las importaciones correctas y comentalo respectivamente, incluye los cambios en el archivo
+
+#### Propuesta de la IA
+
+Copilot generó el código del módulo de memoria guiándose por los docstrings, manejó correctamente las importaciones entre archivos y agregó los comentarios respectivos.
+
+#### Decisión y cambios realizados
+
+Se conservó el código generado sin modificaciones.
+
+#### Justificación
+
+Coincidía con lo solicitado, mantenía el principio de responsabilidad única y se enlazaba correctamente con el resto del proyecto.
+
+---
+
+### Entrada 9 — Pruebas para el módulo de decodificadores (`parsers.py`)
+
+#### Objetivo
+
+Construir pruebas con `pytest` para el módulo de decodificadores construido en `parsers.py`, siguiendo sus docstrings.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Revisa este archivo, aquí quiero construir el punto de prueba con pytest para el modulo de decodificadores que se construyo en el archivo parsers.py, siguiendo los docstrings para su construcción y comentalo respectivamente. Incluye los cambios en el archivo
+
+#### Propuesta de la IA
+
+Copilot generó los tests unitarios con `pytest`, estructurando las pruebas a partir de los docstrings y documentando cada bloque.
+
+#### Decisión y cambios realizados
+
+Se aceptó el código después de ejecutar las pruebas y comprobar que los resultados fueran exitosos.
+
+#### Justificación
+
+Las pruebas confirmaron el correcto funcionamiento del módulo de decodificadores.
+
+---
+
+### Entrada 10 — Pruebas para el módulo de configuración (`config.py`)
+
+#### Objetivo
+
+Construir pruebas con `pytest` para el módulo de configuración construido en `config.py`.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Revisa este archivo, aquí quiero construir el punto de prueba con pytest para el modulo de configuración, que se construyó en el archivo config.py, siguiendo los docstrings para su construcción y comentalo respectivamente. Incluye los cambios en el archivo
+
+#### Propuesta de la IA
+
+Copilot generó las pruebas correspondientes para validar el módulo de configuración, incorporando comentarios de acuerdo con los docstrings.
+
+#### Decisión y cambios realizados
+
+Se aceptó el código tras revisar su estructura y confirmar que las pruebas pasaban correctamente.
+
+#### Justificación
+
+El resultado positivo de las pruebas confirmó que la estructura propuesta era apta para el proyecto.
+
+---
+
+### Entrada 11 — Pruebas para el controlador central (`device.py`)
+
+#### Objetivo
+
+Construir pruebas con `pytest` para el controlador central desarrollado en `device.py`.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Revisa este archivo, aquí quiero construir el punto de prueba con pytest para el modulo de device, que se construyó en el archivo device.py, siguiendo los docstrings para su construcción y comentalo respectivamente. Incluye los cambios en el archivo.
+
+#### Propuesta de la IA
+
+Copilot generó el bloque de pruebas para auditar el funcionamiento del controlador central, siguiendo las instrucciones de los docstrings e incluyendo la documentación necesaria.
+
+#### Decisión y cambios realizados
+
+Se aceptó el código después de confirmar resultados positivos al ejecutar `pytest` y de revisar los comentarios generados.
+
+#### Justificación
+
+El funcionamiento auditado por las pruebas resultó correcto.
+
+---
+
+### Entrada 12 — Pruebas para el módulo de memoria (`recorder.py`)
+
+#### Objetivo
+
+Construir pruebas con `pytest` para el módulo de memoria desarrollado en `recorder.py`.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> revisa este archivo, aquí quiero construir el punto de prueba con pytest para el modulo de memoria, que se construyó en el archivo recorder.py, siguiendo los docstrings para su construcción y comentalo respectivamente. Incluye los cambios en el archivo.
+
+#### Propuesta de la IA
+
+Copilot generó los escenarios de prueba con `pytest`, reemplazando los esqueletos vacíos con la lógica de validación correspondiente y sus respectivos comentarios.
+
+#### Decisión y cambios realizados
+
+Se aceptó el código tras ejecutar las pruebas y confirmar resultados positivos.
+
+#### Justificación
+
+Se validó el correcto funcionamiento del módulo antes de conservar el código en el proyecto.
+
+---
+
+### Entrada 13 — Pruebas para ISP y DIP
+
+#### Objetivo
+
+Generar 2 pruebas por cada uno de los principios ISP y DIP (4 en total), siguiendo la estructura ya trabajada en entradas anteriores.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Genera un código con pytest para generar 2 pruebas por cada uno de los 2 principios ISP y DIP, sigue la estructura trabajada con anterioridad, comenta las lineas para mejorar la comprensión.
+
+#### Propuesta de la IA
+
+Copilot generó el código de prueba con los 4 tests en total.
+
+#### Decisión y cambios realizados
+
+Se aceptó el código después de ejecutar las pruebas en terminal y confirmar resultados positivos.
+
+#### Justificación
+
+Los resultados obtenidos al probar el código con `pytest` confirmaron que era correcto.
+
+---
+
+## Semana 2
+
+### Entrada 1 — Construcción del Product Backlog
+
+#### Objetivo
+
+Construir el Product Backlog del sistema de monitoreo IoT para una bodega industrial: historias de usuario, prioridades bajo el esquema MoSCoW, estimaciones mediante story points y escenarios de aceptación en formato Given-When-Then.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Ayúdame a construir el Product Backlog de un sistema de monitoreo IoT para una bodega industrial. Necesito historias de usuario redactadas en el formato "Como... quiero... para...", cada una con una prioridad bajo el esquema MoSCoW (Must, Should, Could, Won't Have), una estimación en story points y al menos 2 escenarios de aceptación escritos con la estructura Given-When-Then. Cubre registro de lecturas, detección de anomalías por umbrales, envío de alertas por consola y archivo, muestreo cíclico, orquestación de varios sensores, simulación de datos, pruebas de integración, validación de rango físico, persistencia histórica y gestión dinámica de umbrales.
+
+#### Propuesta de la IA
+
+Copilot generó un documento con 10 historias de usuario (US-01 a US-10), cada una con su prioridad MoSCoW, su estimación en story points y sus respectivos escenarios Given-When-Then, cubriendo desde el registro estructurado de lecturas (`SensorReading`) hasta la gestión dinámica de umbrales sin necesidad de reiniciar el sistema.
+
+#### Decisión y cambios realizados
+
+Se aceptó la estructura general del backlog. Se revisaron los valores numéricos propuestos en los distintos escenarios (umbrales, tolerancias de tiempo, distribuciones estadísticas) para verificar que fueran coherentes entre historias relacionadas, y se ajustaron los rangos de temperatura y humedad de US-08 para que correspondieran con los umbrales ya definidos en US-02.
+
+#### Justificación
+
+Un backlog completo y verificable era indispensable antes de iniciar cualquier ciclo de TDD, ya que cada escenario Given-When-Then funciona como criterio de aceptación de las pruebas que se construirían más adelante.
+
+---
+
+### Entrada 2 — Desarrollo de `SensorRegistry` mediante TDD
+
+#### Objetivo
+
+Implementar la clase `SensorRegistry` siguiendo estrictamente el ciclo TDD (RED-GREEN-REFACTOR), respetando la regla de que cada commit de prueba debe preceder al commit del código correspondiente.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Ayúdame a desarrollar SensorRegistry mediante TDD estricto para US-01. Primero necesito el test que compruebe que, al pedir un sensor con un ID que no existe (por ejemplo "GHOST-99"), se lance una excepción SensorNotFoundError. El test debe fallar por ImportError porque SensorRegistry todavía no existe. Después de confirmar la fase RED, ayúdame con la implementación mínima para pasar a GREEN, y por último sugiere un refactor que extraiga la validación del sensor sin romper las pruebas.
+
+#### Propuesta de la IA
+
+Copilot propuso primero la prueba `test_get_unknown_sensor_raises`, que instancia `SensorRegistry` y verifica con `pytest.raises(SensorNotFoundError)` que se lance la excepción esperada al pedir un sensor inexistente. Confirmada la fase RED (fallo por `ImportError`, ya que `SensorRegistry` todavía no existía), propuso la implementación mínima de la clase para que la prueba pasara (GREEN). Finalmente, para REFACTOR, sugirió extraer la validación del identificador del sensor en un método separado dentro de `SensorRegistry`.
+
+#### Decisión y cambios realizados
+
+Se siguieron las 3 fases en orden. Se creó primero el archivo de prueba y se confirmó su fallo (RED) con el commit `test: especificar SensorRegistry (RED) - us-01`. Se implementó después el código mínimo necesario (GREEN) con su propio commit, y finalmente se aplicó el refactor sugerido, registrado en un tercer commit.
+
+#### Justificación
+
+Que el commit de prueba siempre preceda al commit de código deja evidencia clara del ciclo TDD en el historial de Git, y confirma que la implementación surgió a partir de una prueba que realmente falló primero.
+
+---
+
+### Entrada 3 — Auditoría del backlog con criterios Gherkin
+
+#### Objetivo
+
+Auditar las 10 historias de usuario del backlog aplicando criterios Gherkin (verificabilidad, ambigüedad, casos borde faltantes) para decidir cuáles conservar como núcleo del sprint.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Quiero que audites mis user stories con criterios Gherkin, se supone que se hicieron para un sistema de monitoreo IOT para bodega industrial. Las primeras 3 deben ser de núcleo con las siguientes características: SensorReading, AnomalyDetector (umbrales inyectados, no hardcodeados) y AlertManager (estrategia abstracta + Console y File) para tener una cobertura del 80% mínimo en el test. Las siguientes preguntas te servirán para descartar o decirme que corregir: ¿es verificable? ¿es ambiguo? ¿qué caso borde falta?
+> Usa esos criterios para elegir alguno o algunos de los 10 que estan escritos y dime el porque de tu decisión.
+
+#### Propuesta de la IA
+
+Copilot revisó las 10 user stories, aplicando los criterios Gherkin a cada una. Determinó que 2 debían descartarse por no cumplir los requisitos, y que otras 4 necesitaban ajustes por ambigüedades, imprecisiones, falta de verificabilidad o ausencia del caso de error.
+
+#### Decisión y cambios realizados
+
+Se solicitó a la IA aplicar los cambios directamente en el archivo: sustituir las 2 historias descartadas por otras que sí cumplieran los criterios, y corregir las irregularidades detectadas en las otras 4.
+
+#### Justificación
+
+Aplicar criterios objetivos de verificabilidad, ambigüedad y casos borde antes de iniciar el desarrollo evita construir pruebas de TDD sobre historias de usuario mal definidas.
+
+---
+
+### Entrada 4 — Desarrollo de US-01 (`SensorReading`) mediante TDD
+
+#### Objetivo
+
+Implementar `SensorReading` siguiendo el ciclo TDD, de modo que el sistema registre lecturas válidas en un objeto inmutable y rechace lecturas con datos corruptos, según los escenarios definidos en el backlog.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Ayúdame a desarrollar US-01 mediante TDD. Necesito una clase SensorReading que reciba un ID de sensor, temperatura y humedad, y que genere un objeto inmutable con esos datos más el timestamp exacto de recepción. Primero crea las pruebas que confirmen que una lectura válida se crea correctamente, y que una lectura con valores nulos o vacíos lanza un error de validación y se descarta. Después ayúdame con la implementación mínima para pasar esas pruebas.
+
+#### Propuesta de la IA
+
+**RED:** Copilot propuso 2 pruebas: la creación correcta de una lectura válida (verificando que el objeto resultante fuera inmutable y conservara el timestamp de recepción) y el rechazo de lecturas con valores nulos o vacíos mediante una excepción de validación. Ambas pruebas fallaron inicialmente porque `SensorReading` no existía todavía.
+
+**GREEN:** propuso una clase inmutable que valida los campos recibidos antes de construir el objeto, y lanza una excepción de validación al detectar datos vacíos o nulos.
+
+#### Decisión y cambios realizados
+
+Se aceptaron las 2 pruebas por representar directamente los criterios de aceptación de US-01. Se confirmó la fase RED antes de aceptar la implementación mínima que las hacía pasar.
+
+#### Justificación
+
+Verificar primero el fallo de las pruebas confirma que la validación de datos no estaba implementada de antemano, y que la clase inmutable resultante corresponde exactamente a lo exigido por los escenarios Given-When-Then de US-01.
+
+---
+
+### Entrada 5 — Desarrollo de US-02 (`AnomalyDetector`) mediante TDD
+
+#### Objetivo
+
+Implementar `AnomalyDetector` con umbrales inyectados (no hardcodeados) que clasifique una lectura como anomalía si la temperatura o la humedad exceden sus umbrales.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Ayúdame a desarrollar US-02 mediante TDD. Necesito una clase AnomalyDetector que reciba los umbrales de temperatura y humedad por constructor (no hardcodeados) y que marque una lectura como anomalía si cualquiera de los dos valores excede su umbral. Si ambos valores están fuera de rango, debe generar una sola marca de anomalía y no dos. Empieza con las pruebas antes que la implementación.
+
+#### Propuesta de la IA
+
+**RED:** Copilot generó pruebas para la detección de anomalía por temperatura fuera de umbral, la detección por humedad fuera de umbral, la detección cuando ambos parámetros están fuera de umbral (verificando que solo se genere una marca de anomalía y no dos) y la clasificación como "Normal" cuando la lectura está dentro de los parámetros esperados.
+
+**GREEN:** implementó `AnomalyDetector` recibiendo los umbrales en el constructor y aplicando una condición OR lógica entre temperatura y humedad para decidir si la lectura es anómala.
+
+#### Decisión y cambios realizados
+
+Se aceptaron las 4 pruebas y la implementación mínima, verificando específicamente que los umbrales se inyectaran por constructor y no quedaran fijos dentro del código.
+
+#### Justificación
+
+Inyectar los umbrales en lugar de fijarlos en el código permite reconfigurar la sensibilidad del detector sin modificar su lógica interna, tal como lo exige el backlog.
+
+---
+
+### Entrada 6 — Desarrollo de US-03 (`AlertManager`) mediante TDD
+
+#### Objetivo
+
+Implementar `AlertManager` con una estrategia abstracta de notificación y dos implementaciones concretas (`Console` y `File`), incluyendo el manejo de errores al escribir en archivo.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Ayúdame a desarrollar US-03 mediante TDD. Necesito un AlertManager que reciba una estrategia de notificación abstracta, con dos implementaciones: una que imprima la alerta en consola y otra que la escriba al final de un archivo alertas.log. Si la estrategia de archivo falla por falta de permisos, debe capturar la excepción, registrarla en el logger del sistema y evitar que el programa se bloquee. Empieza con las pruebas.
+
+#### Propuesta de la IA
+
+**RED:** Copilot propuso pruebas para la notificación de alerta por consola, el registro de alerta en archivo (verificando que se escribiera al final del archivo y que este se cerrara correctamente) y el fallo en la escritura a archivo (verificando que se capturara la excepción de permiso denegado sin bloquear el programa).
+
+**GREEN:** implementó `AlertManager` con una clase abstracta `AlertStrategy` y dos subclases —una para consola y otra para archivo—, esta última con manejo de excepciones sobre errores de permisos.
+
+#### Decisión y cambios realizados
+
+Se aceptaron las 3 pruebas y la implementación mínima. Se verificó específicamente que un fallo de escritura no detuviera la ejecución del programa, tal como lo exige el escenario de error del backlog.
+
+#### Justificación
+
+Usar una estrategia abstracta permite añadir nuevos canales de alerta en el futuro sin modificar `AlertManager`, cumpliendo tanto el principio abierto/cerrado como el criterio de aceptación de US-03.
+
+---
+
+### Entrada 7 — Configuración del tablero Kanban en GitHub Projects
+
+#### Objetivo
+
+Configurar el tablero Kanban en GitHub Projects para documentar el Sprint 1, trasladando las historias del backlog escritas en texto plano a tarjetas organizadas por columna.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Para documentar correctamente mi Sprint 1 y cumplir con la rúbrica dada, necesito configurar mi tablero Kanban en GitHub Projects. Tengo mi archivo de Product Backlog con 10 historias de usuario y he seleccionado 5 para este sprint. Tu tarea es explicarme cómo debo estructurar las columnas (Product Backlog, Sprint, In Progress, Review, Done) y cuál es la forma correcta de trasladar mis historias redactadas en texto plano a tarjetas de GitHub para que la evidencia quede correctamente documentada y refleje mi avance con el código del núcleo.
+
+#### Propuesta de la IA
+
+Proporcionó una guía detallada sobre la configuración de GitHub Projects, aclarando que los archivos `.md` locales no se sincronizan automáticamente con la vista web. Recomendó utilizar la función de "Draft Issues" para transcribir los títulos exactos del backlog. Además, definió la distribución lógica de las tarjetas: las historias no seleccionadas debían ir a la columna "Product Backlog", las pendientes de desarrollo a "Sprint", y las historias de `SensorReading`, `AnomalyDetector` y `AlertManager` a la columna "Done".
+
+#### Decisión y cambios realizados
+
+Se aplicó la estructura sugerida creando manualmente las tarjetas directamente en el tablero. Se verificó que los títulos coincidieran letra por letra con el archivo original para no mezclar tareas técnicas con historias de usuario, y se acomodaron las tarjetas en las columnas correspondientes, reflejando el estado real del repositorio.
+
+#### Justificación
+
+Mantener los nombres exactos entre el backlog y las tarjetas evita ambigüedad entre las historias de usuario y las tareas técnicas de desarrollo, permitiendo que el tablero sirva como evidencia fiel del avance del sprint.
