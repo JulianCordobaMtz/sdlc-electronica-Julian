@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, field_validator
+from typing import Optional
+from datetime import datetime
 
 class SensorReadingIn(BaseModel):
-    sensor_id: str = Field(..., examples=["TEMP-01"])
     value: float
     unit: str = "C"
 
@@ -15,16 +16,20 @@ class SensorReadingIn(BaseModel):
     @field_validator('value')
     @classmethod
     def validar_cero_absoluto(cls, v, info):
-        # info.data contiene los valores previamente validados (como 'unit')
         unidad = info.data.get('unit', 'C')
-        
-        # Validación física real
         if unidad == "C" and v < -273.15:
-            raise ValueError("Temperatura por debajo del cero absoluto físicamente imposible (-273.15 C)")
+            raise ValueError("Temperatura por debajo del cero absoluto (-273.15 C)")
         elif unidad == "F" and v < -459.67:
-            raise ValueError("Temperatura por debajo del cero absoluto físicamente imposible (-459.67 F)")
-            
+            raise ValueError("Temperatura por debajo del cero absoluto (-459.67 F)")
         return v
+
+# Schema para el PATCH (todo opcional)
+class SensorReadingUpdate(BaseModel):
+    value: Optional[float] = None
+    unit: Optional[str] = None
 
 class SensorReadingOut(SensorReadingIn):
     id: int
+    sensor_id: str
+    timestamp: datetime
+    is_active: bool
