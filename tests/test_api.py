@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.main import app
 from app.db import Base
+from app.main import app
 from app.routers import reading_router, sensor_router
 
 # 1. Configurar una base de datos SQLite EN MEMORIA (se borra al terminar)
@@ -64,7 +64,10 @@ def test_sensor_no_encontrado_devuelve_404():
 
 def test_crear_lectura_exitosa():
     # Primero creamos el sensor padre
-    client.post("/sensors", json={"sensor_id": "TEMP-02", "name": "Sensor 2", "type": "temperatura"})
+    client.post(
+        "/sensors", 
+        json={"sensor_id": "TEMP-02", "name": "Sensor 2", "type": "temperatura"}
+    )
     
     # Registramos su lectura
     response = client.post("/sensors/TEMP-02/readings", json={
@@ -76,7 +79,10 @@ def test_crear_lectura_exitosa():
 
 def test_validacion_fisica_cero_absoluto_devuelve_422():
     # Creamos el sensor
-    client.post("/sensors", json={"sensor_id": "TEMP-03", "name": "Sensor 3", "type": "temperatura"})
+    client.post(
+        "/sensors", 
+        json={"sensor_id": "TEMP-03", "name": "Sensor 3", "type": "temperatura"}
+    )
     
     # Intentamos registrar una temperatura imposible en el universo
     response = client.post("/sensors/TEMP-03/readings", json={
@@ -91,8 +97,11 @@ def test_validacion_fisica_cero_absoluto_devuelve_422():
 
 def test_operaciones_completas_sensores():
     # 1. Crear
-    client.post("/sensors", json={"sensor_id": "SENS-04", "name": "S4", "type": "humedad"})
-    
+    client.post(
+        "/sensors", 
+        json={"sensor_id": "SENS-04", "name": "S4", "type": "humedad"}
+    )
+
     # 2. Listar
     response_list = client.get("/sensors")
     assert len(response_list.json()) > 0
@@ -108,10 +117,16 @@ def test_operaciones_completas_sensores():
 
 def test_operaciones_completas_lecturas():
     # 1. Crear sensor padre
-    client.post("/sensors", json={"sensor_id": "SENS-05", "name": "S5", "type": "temperatura"})
+    client.post(
+        "/sensors", 
+        json={"sensor_id": "SENS-05", "name": "S5", "type": "temperatura"}
+    )
     
     # 2. Crear lectura
-    res_create = client.post("/sensors/SENS-05/readings", json={"value": 20.0, "unit": "C"})
+    res_create = client.post(
+        "/sensors/SENS-05/readings", 
+        json={"value": 20.0, "unit": "C"}
+    )
     reading_id = res_create.json()["id"]
 
     # 3. Listar lecturas del sensor

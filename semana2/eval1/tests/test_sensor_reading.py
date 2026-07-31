@@ -1,6 +1,8 @@
-import pytest
 from datetime import datetime
+
+import pytest
 from sensor_reading import SensorReading
+
 
 def test_sensor_reading_creacion():
     # Dado que tenemos datos de un sensor

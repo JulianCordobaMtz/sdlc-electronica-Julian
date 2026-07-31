@@ -1,0 +1,6 @@
+[tool.ruff]
+exclude = ["semana1", "semana2", ".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008"]

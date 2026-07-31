@@ -1,7 +1,9 @@
-from app.services.reading_service import ReadingService
 from app.schemas.reading import SensorReadingIn
+from app.services.reading_service import ReadingService
 
-# 1. Actualizamos el repositorio Fake para que exija 'sensor_id' y los datos en formato diccionario, igual que tu repo real de hoy.
+
+# 1. Actualizamos el repositorio Fake para que exija 'sensor_id' y 
+# los datos en formato diccionario, igual que tu repo real de hoy.
 class FakeReadingRepository:
     def create(self, db, sensor_id: str, data: dict):
         class FakeReading:
@@ -18,7 +20,8 @@ def test_registrar_lectura_con_fake_repo():
     
     lectura_in = SensorReadingIn(value=25.5, unit="C")
     
-    # 2. LA CORRECCIÓN: Ahora pasamos correctamente el ID del sensor ("TEMP-FAKE") como segundo argumento.
+    # 2. LA CORRECCIÓN: Ahora pasamos correctamente el ID del sensor ("TEMP-FAKE") 
+    # como segundo argumento.
     resultado = servicio.registrar_lectura(None, "TEMP-FAKE", lectura_in)
     
     assert resultado.value == 25.5

@@ -1,6 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
 from app.models.sensor import SensorModel
+
 
 class SensorRepository:
     def create(self, db: Session, data: dict) -> SensorModel:
@@ -15,7 +17,12 @@ class SensorRepository:
 
     def get_all(self, db: Session, limit: int, offset: int):
         # Filtramos para devolver solo los sensores activos
-        stmt = select(SensorModel).where(SensorModel.is_active == True).offset(offset).limit(limit)
+        stmt = (
+            select(SensorModel)
+            .where(SensorModel.is_active)
+            .offset(offset)
+            .limit(limit)
+        )
         return db.scalars(stmt).all()
 
     def update(self, db: Session, db_sensor: SensorModel, data: dict) -> SensorModel:

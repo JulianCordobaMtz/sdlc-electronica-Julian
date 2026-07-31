@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+
 class DataRecorder:
     """Componente dedicado a persistir (guardar) los datos decodificados.
     Su única responsabilidad (SRP) es manejar el sistema de archivos
@@ -26,9 +27,9 @@ class DataRecorder:
         # Si el archivo ya existe, cargar los datos existentes
         if file_path.exists():
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, encoding='utf-8') as f:
                     records = json.load(f)
-            except (json.JSONDecodeError, IOError):
+            except (OSError, json.JSONDecodeError):
                 # Si el archivo está vacío o corrupto, comenzar con lista vacía
                 records = []
         

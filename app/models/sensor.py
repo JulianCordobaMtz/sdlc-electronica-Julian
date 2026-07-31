@@ -1,6 +1,8 @@
-from sqlalchemy import String, Float, Boolean
+from sqlalchemy import Boolean, Float, String
 from sqlalchemy.orm import Mapped, mapped_column
+
 from app.db import Base
+
 
 class SensorModel(Base):
     __tablename__ = "sensors"

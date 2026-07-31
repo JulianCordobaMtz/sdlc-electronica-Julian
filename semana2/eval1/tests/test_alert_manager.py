@@ -1,7 +1,8 @@
-import os
 from datetime import datetime
-from sensor_reading import SensorReading
+
 from alert_manager import AlertManager, ConsoleStrategy, FileStrategy
+from sensor_reading import SensorReading
+
 
 def test_console_strategy_output(capsys):
     """Prueba que ConsoleStrategy imprima la alerta en la salida estándar"""

@@ -1,6 +1,7 @@
-from pydantic import BaseModel, field_validator
-from typing import Optional
 from datetime import datetime
+
+from pydantic import BaseModel, field_validator
+
 
 class SensorReadingIn(BaseModel):
     value: float
@@ -25,8 +26,8 @@ class SensorReadingIn(BaseModel):
 
 # Schema para el PATCH (todo opcional)
 class SensorReadingUpdate(BaseModel):
-    value: Optional[float] = None
-    unit: Optional[str] = None
+    value: float | None = None
+    unit: str | None = None
 
 class SensorReadingOut(SensorReadingIn):
     id: int

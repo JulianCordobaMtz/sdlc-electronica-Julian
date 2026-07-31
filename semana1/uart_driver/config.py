@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Literal
 
+
 @dataclass(frozen=True)
 class UartConfig:
     """Configuración inmutable para el puerto UART.

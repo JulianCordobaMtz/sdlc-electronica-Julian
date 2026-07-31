@@ -1,7 +1,10 @@
 from datetime import datetime
-from sqlalchemy import String, Float, Boolean, DateTime
+
+from sqlalchemy import Boolean, DateTime, Float, String
 from sqlalchemy.orm import Mapped, mapped_column
+
 from app.db import Base
+
 
 class ReadingModel(Base):
     __tablename__ = "readings"

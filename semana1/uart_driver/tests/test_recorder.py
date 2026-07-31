@@ -1,7 +1,6 @@
-import sys
 import json
+import sys
 from pathlib import Path
-import pytest
 
 # Forzar la inclusión de la carpeta 'uart_driver' en el PATH del sistema
 # Esto permite importar el módulo `recorder.py` para las pruebas
@@ -10,6 +9,7 @@ directorio_padre = directorio_actual.parent
 sys.path.insert(0, str(directorio_padre))
 
 from recorder import DataRecorder
+
 
 # PRUEBAS PARA EL MÓDULO DE RECORDER
 def test_datarecorder_crea_directorio(tmp_path):
@@ -40,7 +40,7 @@ def test_datarecorder_guarda_nuevo_archivo(tmp_path):
     file_path = tmp_path / 'test_log.json'
     assert file_path.exists()
 
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, encoding='utf-8') as f:
         content = json.load(f)
 
     assert isinstance(content, list)
@@ -62,7 +62,7 @@ def test_datarecorder_anexa_datos_existentes(tmp_path):
     recorder.record(next_record, filename='test_log.json')
 
     # Verificación: el archivo ahora contiene ambos registros en orden
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, encoding='utf-8') as f:
         content = json.load(f)
 
     assert content == existing + [next_record]

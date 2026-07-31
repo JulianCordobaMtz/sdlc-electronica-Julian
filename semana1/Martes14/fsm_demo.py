@@ -1,6 +1,7 @@
 #IMPORTACIONES
 from enum import Enum, auto
 
+
 #Se crea la clase TrafficLightState haciendo uso de Enum para la asignación de los estados de los colores
 class TrafficLightState (Enum):
     RED = auto()

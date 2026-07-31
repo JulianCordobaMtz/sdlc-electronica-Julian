@@ -1,1 +1,1 @@
-from .reading import ReadingModel
+from .reading import ReadingModel as ReadingModel

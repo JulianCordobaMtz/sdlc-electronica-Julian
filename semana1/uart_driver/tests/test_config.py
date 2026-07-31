@@ -1,6 +1,6 @@
 import sys
-import os
 from pathlib import Path
+
 import pytest
 
 # Forzar la inclusión de la carpeta 'uart_driver' en el PATH del sistema
@@ -9,6 +9,7 @@ directorio_padre = directorio_actual.parent
 sys.path.insert(0, str(directorio_padre))
 
 from config import UartConfig
+
 
 # PRUEBAS PARA EL MÓDULO DE CONFIGURACIÓN
 def test_uartconfig_valores_por_defecto():

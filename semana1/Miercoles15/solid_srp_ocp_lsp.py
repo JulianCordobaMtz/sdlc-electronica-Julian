@@ -28,7 +28,7 @@ class SensorReading: #Clase para representar la lectura de un sensor
 # EL EJEMPLO MALO
 class AnomalyDetectorMal: #Crea el detector de anomalías mal diseñado
     def check(self, reading: SensorReading, alert_type: str) -> str: #Recibe la lectura y obliga a pedir el tipo de alerta
-        if reading.value > 50.0: #
+        if reading.value > 50.0:
             if alert_type == "console": #Si es consola, entra aquí. Si mañana piden alerta por SMS, hay que modificar este código
                 return f"Imprimiendo en consola: Anomalía en {reading.sensor_id}" #Devuelve el mensaje de consola
             elif alert_type == "file": #ROMPE LA REGLA (Cerrado a modificaciones): Nos obliga a seguir agregando "elifs" aquí adentro

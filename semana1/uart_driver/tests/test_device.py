@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+
 import pytest
 
 # Forzar la inclusión de la carpeta 'uart_driver' en el PATH del sistema
@@ -8,9 +9,10 @@ directorio_actual = Path(__file__).resolve().parent
 directorio_padre = directorio_actual.parent
 sys.path.insert(0, str(directorio_padre))
 
+from config import UartConfig  # Configuración inyectada en el dispositivo
 from device import UARTDevice  # Clase bajo prueba
-from config import UartConfig    # Configuración inyectada en el dispositivo
 from parsers import MessageParser  # Interfaz para crear mocks de parsers
+
 
 # MÓDULO DE PRUEBAS (MOCK)
 class DummyParser(MessageParser):

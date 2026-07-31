@@ -1,6 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+
 from app.models.reading import ReadingModel
+
 
 class ReadingRepository:
     def create(self, db: Session, sensor_id: str, data: dict) -> ReadingModel:
@@ -13,10 +15,12 @@ class ReadingRepository:
     def get_by_id(self, db: Session, reading_id: int) -> ReadingModel | None:
         return db.get(ReadingModel, reading_id)
 
-    def get_by_sensor(self, db: Session, sensor_id: str, limit: int, offset: int, from_date, to_date):
+    def get_by_sensor(
+        self, db: Session, sensor_id: str, limit: int, offset: int, from_date, to_date
+    ):
         stmt = select(ReadingModel).where(
             ReadingModel.sensor_id == sensor_id,
-            ReadingModel.is_active == True
+            ReadingModel.is_active
         )
         if from_date:
             stmt = stmt.where(ReadingModel.timestamp >= from_date)
