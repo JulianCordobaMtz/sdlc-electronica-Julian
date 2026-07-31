@@ -1,16 +1,12 @@
 from fastapi import FastAPI
 from app.db import Base, engine
-from app.routers import reading_router
+from app.routers import reading_router, sensor_router  # IMPORTANTE: importar el nuevo router
 
-# Creamos las tablas físicamente
+# Si es necesario, esta línea asegura que SQLAlchemy cree las tablas
 Base.metadata.create_all(bind=engine)
 
-# Encendemos la API
 app = FastAPI(title="SensorHub API", version="0.1.0")
 
-# Conectamos el router (la sub-placa) a nuestra app principal
+# Registramos ambas rutas
+app.include_router(sensor_router.router)
 app.include_router(reading_router.router)
-
-@app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
