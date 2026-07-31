@@ -579,3 +579,5 @@ Se aplicó la estructura sugerida creando manualmente las tarjetas directamente 
 #### Justificación
 
 Mantener los nombres exactos entre el backlog y las tarjetas evita ambigüedad entre las historias de usuario y las tareas técnicas de desarrollo, permitiendo que el tablero sirva como evidencia fiel del avance del sprint.
+
+### Entrada 8
