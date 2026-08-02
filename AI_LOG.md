@@ -579,3 +579,145 @@ Se aplicó la estructura sugerida creando manualmente las tarjetas directamente 
 #### Justificación
 
 Mantener los nombres exactos entre el backlog y las tarjetas evita ambigüedad entre las historias de usuario y las tareas técnicas de desarrollo, permitiendo que el tablero sirva como evidencia fiel del avance del sprint.
+
+
+## Semana 3
+ 
+### Entrada 1 — Guardar los datos de los sensores en una base de datos real
+ 
+#### Objetivo
+ 
+Dejar de perder los datos de sensores y lecturas cada vez que se apagaba el servidor, guardándolos en una base de datos de verdad.
+ 
+#### Herramienta utilizada
+ 
+`GitHub Copilot`
+ 
+#### Prompt utilizado
+ 
+> Necesito pasar mis datos de sensores y lecturas, que hasta ahora solo vivían en memoria, a una base de datos real. Ayúdame a crear las clases Sensor y Reading con la forma nueva de escribir modelos en SQLAlchemy, dejando claro que cada lectura pertenece a un sensor.
+ 
+#### Propuesta de la IA
+ 
+Copilot me dio las clases Sensor y Reading, indicando qué tipo de dato lleva cada columna (número, texto, fecha) y conectando ambas tablas para que cada lectura supiera a qué sensor pertenece.
+ 
+#### Decisión y cambios realizados
+ 
+Acepté la propuesta, pero revisé que todo estuviera escrito con la forma nueva de SQLAlchemy y no con la forma vieja que a veces la IA usa porque aprendió de tutoriales antiguos.
+ 
+#### Justificación
+ 
+Usar la forma nueva hace que todo el proyecto quede escrito de manera consistente (con los mismos tipos de dato en todos lados), y así puedo revisarlo con las mismas herramientas que ya uso en el resto del código, sin mezclar estilos distintos.
+ 
+---
+ 
+### Entrada 2 — Organizar el código en carpetas para que no se vuelva un desorden
+ 
+#### Objetivo
+ 
+Ordenar mi carpeta `app/` para que cada parte del código tuviera su lugar, en vez de tener todo mezclado.
+ 
+#### Herramienta utilizada
+ 
+`GitHub Copilot`
+ 
+#### Prompt utilizado
+ 
+> Quiero organizar mi API en carpetas separadas: una para los modelos de base de datos, otra para lo que valida los datos, otra para las consultas a la base de datos, otra para la lógica de mi programa y otra para lo que recibe las peticiones web. Ayúdame a entender qué debe hacer cada carpeta y cómo se comunican entre sí, para que la parte que recibe la petición no tenga que saber nada de cómo se guarda la información.
+ 
+#### Propuesta de la IA
+ 
+Copilot me explicó cómo debía verse esa separación: lo que recibe la petición solo la pasa a la siguiente parte, esa parte se encarga de la lógica, y solo una última parte habla directamente con la base de datos.
+ 
+#### Decisión y cambios realizados
+ 
+Acepté la forma de organizarlo y revisé, carpeta por carpeta, que ninguna parte se estuviera saltando ese orden (por ejemplo, que la que recibe la petición no estuviera hablando directo con la base de datos).
+ 
+#### Justificación
+ 
+Si en algún momento cambio de base de datos, no debería tener que tocar la parte que recibe las peticiones. Eso era justo lo que pedía la rúbrica de esta semana.
+ 
+---
+ 
+### Entrada 3 — Validar que los datos tengan sentido, y un error que encontré yo mismo
+ 
+#### Objetivo
+ 
+Que la API no aceptara datos sin sentido, como una humedad imposible o una unidad de medida que no existe.
+ 
+#### Herramienta utilizada
+ 
+`GitHub Copilot`
+ 
+#### Prompt utilizado
+ 
+> Necesito revisar los datos de una lectura antes de guardarla: que rechace temperaturas o humedades fuera de rango, y unidades que no reconozca. También ayúdame a escribir una prueba que confirme que, si mando un dato inválido, la API responde con un error y me dice exactamente cuál campo estuvo mal.
+ 
+#### Propuesta de la IA
+ 
+Copilot me dio la validación y también propuso la prueba para comprobar el error. Sin embargo, me pasó una línea de código incompleta —por un problema al copiar el formato— y esa línea no funcionaba como debía.
+ 
+#### Decisión y cambios realizados
+ 
+Al correr la prueba vi que fallaba y me di cuenta de que faltaba una parte de la línea. La corregí yo mismo y se lo hice saber a la IA antes de seguir con las demás pruebas.
+ 
+#### Justificación
+ 
+Si hubiera aceptado esa línea sin revisarla, habría dejado una prueba que nunca iba a funcionar bien, o que fallaba sin que yo me diera cuenta. Revisar el resultado antes de aceptarlo fue justo lo que evitó ese problema.
+ 
+---
+ 
+### Entrada 4 — Terminar el CRUD y subir mi Pull Request
+ 
+#### Objetivo
+ 
+Terminar todas las acciones que le faltaban a mi API (crear, ver, actualizar y borrar) y dejar el código listo para que lo revisaran.
+ 
+#### Herramienta utilizada
+ 
+`GitHub Copilot`
+ 
+#### Prompt utilizado
+ 
+> Ayúdame a terminar lo que le falta a mi API: poder actualizar una lectura y poder desactivar un sensor. Revisa que cada acción responda con el código correcto según lo que pasó, y que lo que mando al crear un registro sea diferente de lo que la API me regresa, para no exponer datos que no debería.
+ 
+#### Propuesta de la IA
+ 
+Copilot completó las dos acciones que faltaban, agregó el mensaje de error correcto cuando algo no existe, y separó lo que se manda al crear un registro de lo que la API regresa, para no dejar visible, por ejemplo, el ID antes de que existiera.
+ 
+#### Decisión y cambios realizados
+ 
+Probé cada acción a mano desde la documentación de mi API antes de aceptarla. Junté todos mis cambios de la semana y abrí mi Pull Request, con una descripción de qué hace y cómo probarlo.
+ 
+#### Justificación
+ 
+Separar lo que se manda de lo que se recibe evita que alguien controle datos que no le corresponden, y responder con el código correcto era parte de lo que se pedía esta semana.
+ 
+---
+ 
+### Entrada 5 — Revisar el código de un compañero
+ 
+#### Objetivo
+ 
+Aprender a revisar el trabajo de otra persona de forma útil, siguiendo la checklist que dio el coordinador.
+ 
+#### Herramienta utilizada
+ 
+`GitHub Copilot`
+ 
+#### Prompt utilizado
+ 
+> Voy a revisar el código de un compañero con la checklist de 10 puntos. Ayúdame a repasar qué cosas debo buscar como señal de alarma: por ejemplo, que meta reglas de su programa en la parte que recibe las peticiones, o que no cierre bien la conexión a la base de datos.
+ 
+#### Propuesta de la IA
+ 
+Copilot me recordó las señales más comunes: lógica del programa metida donde no debería (en vez de estar en su propio lugar), conexiones a la base de datos que no se cierran bien si algo falla, y devolver directamente los datos de la base sin pasar por la validación.
+ 
+#### Decisión y cambios realizados
+ 
+Descargué la rama de mi compañero, la probé en mi computadora y dejé comentarios señalando el archivo y la línea exacta, enfocándome en los puntos donde encontré lógica en el lugar equivocado.
+ 
+#### Justificación
+ 
+Revisar con algo concreto que buscar —y no solo decir "se ve bien"— era lo que pedía la actividad, y encontrar ese tipo de mezcla es de los errores más comunes en esta parte del curso.
+ 
