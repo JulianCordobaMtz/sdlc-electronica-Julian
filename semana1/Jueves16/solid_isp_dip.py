@@ -54,7 +54,7 @@ class DataProcessorMal: #Crea el procesador
     def __init__(self) -> None:
         self._repo = PostgreSQLRepositoryMal() #ROMPE LA REGLA: Está soldado directamente a la base de datos específica
 
-# EL EJEMPLO BUENO (Basado en la imagen del profesor)
+# EL EJEMPLO BUENO
 
 class DataRepository(Protocol): #Crea el contrato estándar (el conector)
     def save(self, reading: SensorReading) -> None: ... #Exige que el módulo que le conecten tenga el pin "save"
