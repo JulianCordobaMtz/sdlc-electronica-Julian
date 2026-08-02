@@ -32,16 +32,16 @@ class ReadingService:
     def actualizar_lectura(
         self, db: Session, reading_id: int, reading_update: SensorReadingUpdate
     ):
-        # Reutilizamos la lógica del 404
+        # 1. Buscamos el objeto real en la base de datos
         db_reading = self.obtener_lectura(db, reading_id) 
         update_data = reading_update.model_dump(exclude_unset=True)
         
-        # Restauramos la lógica que se borró accidentalmente
         if not update_data:
             return db_reading
         
-        # Nota: Si tu método update recibe parámetros diferentes, ajústalo aquí:
-        return self.repo.update(db, reading_id, update_data)
+        # 2. ¡CORRECCIÓN AQUÍ! 
+        # Pasamos el objeto de la base de datos (db_reading) en lugar del entero (reading_id)
+        return self.repo.update(db, db_reading, update_data)
 
     def eliminar_lectura(self, db: Session, reading_id: int):
         # Verifica que exista (404)
