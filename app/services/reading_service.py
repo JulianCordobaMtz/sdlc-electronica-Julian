@@ -39,10 +39,9 @@ class ReadingService:
         if not update_data:
             return db_reading
         
-        # 2. ¡CORRECCIÓN AQUÍ! 
-        # Pasamos el objeto de la base de datos (db_reading) en lugar del entero (reading_id)
-        return self.repo.update(db, db_reading, update_data)
 
+        return self.repo.update(db, db_reading, update_data)
+    
     def eliminar_lectura(self, db: Session, reading_id: int):
         # Verifica que exista (404)
         db_reading = self.obtener_lectura(db, reading_id) 
