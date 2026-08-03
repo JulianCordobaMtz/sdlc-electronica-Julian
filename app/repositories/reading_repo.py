@@ -6,6 +6,8 @@ from app.models.reading import ReadingModel
 
 class ReadingRepository:
     def __init__(self, db: Session):
+        # El repositorio recibe la sesión por inyección y la mantiene en su instancia.
+        # Esta capa es la única que toca la base de datos.
         self.db = db
 
     def create(self, sensor_id: str, data: dict) -> ReadingModel:

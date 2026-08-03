@@ -4,6 +4,8 @@ from app.schemas.reading import SensorReadingIn, SensorReadingUpdate
 
 class ReadingService:
     def __init__(self, repo):
+        # El servicio no construye el repositorio ni la sesión.
+        # Recibe el repositorio inyectado desde el router.
         self.repo = repo
 
     def registrar_lectura(

@@ -1,5 +1,7 @@
 class SensorService:
     def __init__(self, repo):
+        # El servicio no crea el repositorio.
+        # Recibe el repositorio ya inyectado por el router.
         self.repo = repo
 
     def create_sensor(self, sensor_in):
