@@ -5,18 +5,21 @@ from app.models.reading import ReadingModel
 
 
 class ReadingRepository:
-    def create(self, db: Session, sensor_id: str, data: dict) -> ReadingModel:
+    def __init__(self, db: Session):
+        self.db = db
+
+    def create(self, sensor_id: str, data: dict) -> ReadingModel:
         db_reading = ReadingModel(sensor_id=sensor_id, **data)
-        db.add(db_reading)
-        db.commit()
-        db.refresh(db_reading)
+        self.db.add(db_reading)
+        self.db.commit()
+        self.db.refresh(db_reading)
         return db_reading
 
-    def get_by_id(self, db: Session, reading_id: int) -> ReadingModel | None:
-        return db.get(ReadingModel, reading_id)
+    def get_by_id(self, reading_id: int) -> ReadingModel | None:
+        return self.db.get(ReadingModel, reading_id)
 
     def get_by_sensor(
-        self, db: Session, sensor_id: str, limit: int, offset: int, from_date, to_date
+        self, sensor_id: str, limit: int, offset: int, from_date, to_date
     ):
         stmt = select(ReadingModel).where(
             ReadingModel.sensor_id == sensor_id,
@@ -28,15 +31,15 @@ class ReadingRepository:
             stmt = stmt.where(ReadingModel.timestamp <= to_date)
             
         stmt = stmt.offset(offset).limit(limit)
-        return db.scalars(stmt).all()
+        return self.db.scalars(stmt).all()
 
-    def update(self, db: Session, db_reading: ReadingModel, data: dict) -> ReadingModel:
+    def update(self, db_reading: ReadingModel, data: dict) -> ReadingModel:
         for key, value in data.items():
             setattr(db_reading, key, value)
-        db.commit()
-        db.refresh(db_reading)
+        self.db.commit()
+        self.db.refresh(db_reading)
         return db_reading
 
-    def delete(self, db: Session, db_reading: ReadingModel):
-        db_reading.is_active = False # Borrado lógico (soft delete)
-        db.commit()
+    def delete(self, db_reading: ReadingModel):
+        db_reading.is_active = False  # Borrado lógico (soft delete)
+        self.db.commit()

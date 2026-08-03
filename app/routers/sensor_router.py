@@ -17,6 +17,12 @@ def create_sensor(
     sensor_in: SensorIn,
     service: SensorService = Depends(get_sensor_service),
 ):
+    """Crear un nuevo sensor.
+    
+    - **sensor_id**: Identificador único del sensor (ej. TEMP-01)
+    - **name**: Nombre del sensor
+    - **type**: Tipo de sensor (ej. temperatura, humedad)
+    """
     try:
         return service.create_sensor(sensor_in)
     except ValueError as e:
@@ -28,12 +34,18 @@ def list_sensors(
     offset: int = 0,
     service: SensorService = Depends(get_sensor_service),
 ):
+    """Listar todos los sensores con paginación.
+    
+    - **limit**: Cantidad máxima de resultados (máximo 100)
+    - **offset**: Desplazamiento para paginación
+    """
     return service.get_sensors(limit=limit, offset=offset)
 
 @router.get("/{sensor_id}", response_model=SensorOut, status_code=200)
 def get_sensor(
     sensor_id: str, service: SensorService = Depends(get_sensor_service)
 ):
+    """Obtener un sensor específico por su ID."""
     try:
         return service.get_sensor(sensor_id)
     except ValueError as e:
@@ -45,6 +57,10 @@ def update_sensor(
     sensor_update: SensorUpdate,
     service: SensorService = Depends(get_sensor_service),
 ):
+    """Actualizar un sensor existente (actualización parcial).
+    
+    Solo los campos proporcionados serán actualizados.
+    """
     try:
         return service.update_sensor(sensor_id, sensor_update)
     except ValueError as e:
@@ -54,6 +70,7 @@ def update_sensor(
 def delete_sensor(
     sensor_id: str, service: SensorService = Depends(get_sensor_service)
 ):
+    """Eliminar un sensor por su ID."""
     try:
         service.delete_sensor(sensor_id)
     except ValueError as e:

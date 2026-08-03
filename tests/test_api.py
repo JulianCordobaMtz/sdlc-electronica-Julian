@@ -4,9 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.db import Base
+from app.db import Base, get_db
 from app.main import app
-from app.routers import reading_router, sensor_router
 
 # 1. Configurar una base de datos SQLite EN MEMORIA (se borra al terminar)
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -25,8 +24,7 @@ def override_get_db():
         db.close()
 
 # 2. Inyección de dependencias: Le decimos a FastAPI que use la DB de prueba
-app.dependency_overrides[reading_router.get_db] = override_get_db
-app.dependency_overrides[sensor_router.get_db] = override_get_db
+app.dependency_overrides[get_db] = override_get_db
 
 client = TestClient(app)
 

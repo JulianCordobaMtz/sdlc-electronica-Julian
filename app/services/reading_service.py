@@ -1,5 +1,3 @@
-from fastapi import HTTPException
-from sqlalchemy.orm import Session
 
 from app.schemas.reading import SensorReadingIn, SensorReadingUpdate
 
@@ -9,45 +7,38 @@ class ReadingService:
         self.repo = repo
 
     def registrar_lectura(
-        self, db: Session, sensor_id: str, reading_in: SensorReadingIn
+        self, sensor_id: str, reading_in: SensorReadingIn
     ):
-        return self.repo.create(db, sensor_id, reading_in.model_dump())
+        return self.repo.create(sensor_id, reading_in.model_dump())
 
-    def obtener_lectura(self, db: Session, reading_id: int):
-        db_reading = self.repo.get_by_id(db, reading_id)
+    def obtener_lectura(self, reading_id: int):
+        db_reading = self.repo.get_by_id(reading_id)
         if not db_reading or not db_reading.is_active:
-            raise HTTPException(status_code=404, detail="Lectura no encontrada")
+            raise ValueError("Lectura no encontrada")
         return db_reading
 
     def listar_lecturas(
-        self, db: Session, sensor_id: str, limit: int, offset: int, from_date, to_date
+        self, sensor_id: str, limit: int, offset: int, from_date, to_date
     ):
         if from_date and to_date and from_date > to_date:
-            raise HTTPException(
-                status_code=400, 
-                detail="La fecha 'from' no puede ser mayor a 'to'"
-            )
-        return self.repo.get_by_sensor(db, sensor_id, limit, offset, from_date, to_date)
+            raise ValueError("La fecha 'from' no puede ser mayor a 'to'")
+        return self.repo.get_by_sensor(sensor_id, limit, offset, from_date, to_date)
 
     def actualizar_lectura(
-        self, db: Session, reading_id: int, reading_update: SensorReadingUpdate
+        self, reading_id: int, reading_update: SensorReadingUpdate
     ):
-        # 1. Buscamos el objeto real en la base de datos
-        db_reading = self.obtener_lectura(db, reading_id) 
+        """Actualizar una lectura existente."""
+        db_reading = self.obtener_lectura(reading_id)
         update_data = reading_update.model_dump(exclude_unset=True)
-        
+
         if not update_data:
             return db_reading
-        
 
-        return self.repo.update(db, db_reading, update_data)
-    
-    def eliminar_lectura(self, db: Session, reading_id: int):
-        # Verifica que exista (404)
-        db_reading = self.obtener_lectura(db, reading_id) 
+        return self.repo.update(db_reading, update_data)
+
+    def eliminar_lectura(self, reading_id: int):
+        """Eliminar (soft delete) una lectura."""
+        db_reading = self.obtener_lectura(reading_id)
         if not db_reading.is_active:
-            raise HTTPException(
-                status_code=409, 
-                detail="La lectura ya estaba eliminada"
-            )
-        self.repo.delete(db, db_reading)
+            raise ValueError("La lectura ya estaba eliminada")
+        self.repo.delete(db_reading)
