@@ -1,4 +1,4 @@
-from typing import Protocol #Importa la herramienta Protocol para crear contratos
+from typing import Protocol  #Importa la herramienta Protocol para crear contratos
 
 # I - PRINCIPIO DE SEGREGACIÓN DE INTERFACES (ISP)
 

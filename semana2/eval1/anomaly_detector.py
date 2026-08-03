@@ -1,5 +1,6 @@
 from sensor_reading import SensorReading
 
+
 class AnomalyDetector:
     """Detecta anomalías en las lecturas de los sensores basándose en umbrales."""
     

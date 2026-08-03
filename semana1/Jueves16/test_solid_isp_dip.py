@@ -1,5 +1,6 @@
 import pytest
 
+
 # MOCKS SIMULADOS PARA PRUEBAS
 # --- Mocks para ISP (Segregación de Interfaces) ---
 class SensorMultifuncionMalo:
@@ -70,7 +71,6 @@ def test_dip_mal_diseno_acoplamiento():
     """
     # Al no poder inyectar dependencias, un controlador mal diseñado
     # fallaría al intentar probarse sin el hardware real conectado.
-    pass
 
 def test_dip_buen_diseno_inyeccion_exitosa():
     """

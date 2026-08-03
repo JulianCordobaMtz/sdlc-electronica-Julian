@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 # EL MOLDE PRINCIPAL (Clase Abstracta)
 class MessageParser(ABC):
     """Clase base abstracta para los decodificadores de protocolo.
@@ -11,13 +12,11 @@ class MessageParser(ABC):
     def can_parse(self, raw_data: bytes) -> bool:
         """Analiza los bytes crudos para determinar si corresponden a este protocolo.
         Retorna True si el mensaje tiene el formato correcto, False en caso contrario."""
-        pass
 
     @abstractmethod
     def parse(self, raw_data: bytes) -> dict:
         """Toma los bytes crudos y los decodifica en un formato estructurado.
         Retorna un diccionario de Python con los datos extraídos."""
-        pass
 
 # LOS DECODIFICADORES ESPECÍFICOS (Implementaciones)
 class ModbusParser(MessageParser):
@@ -70,8 +69,7 @@ class NMEAParser(MessageParser):
             sentence = raw_data.decode('ascii').strip()
             
             # Remover el '$' inicial
-            if sentence.startswith('$'):
-                sentence = sentence[1:]
+            sentence = sentence.removeprefix('$')
             
             # Dividir por comas
             parts = sentence.split(',')

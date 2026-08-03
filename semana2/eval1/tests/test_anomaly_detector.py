@@ -1,6 +1,8 @@
 from datetime import datetime
-from sensor_reading import SensorReading
+
 from anomaly_detector import AnomalyDetector
+from sensor_reading import SensorReading
+
 
 def test_detector_acepta_umbrales():
     # Comprobamos que podemos inyectar los límites al crearlo

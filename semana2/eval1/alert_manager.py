@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+
 from sensor_reading import SensorReading
+
 
 class AlertStrategy(ABC):
     """Clase base abstracta para las estrategias de alerta."""
@@ -7,7 +9,6 @@ class AlertStrategy(ABC):
     @abstractmethod
     def enviar(self, lectura: SensorReading, motivo: str) -> None:
         """Envía una alerta basada en la lectura y el motivo."""
-        pass
 
 class ConsoleStrategy(AlertStrategy):
     """Estrategia para imprimir la alerta en la terminal."""

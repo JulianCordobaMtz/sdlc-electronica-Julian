@@ -1,13 +1,14 @@
-from typing import List
-from config import UartConfig 
+
+from config import UartConfig
 from parsers import MessageParser
+
 
 class UARTDevice:
     """Controlador central de la comunicación serial.
     Su única responsabilidad (SRP) es orquestar el flujo de datos: 
     recibir bytes y pasarlos al decodificador correcto."""
 
-    def __init__(self, config: UartConfig, parsers: List[MessageParser]) -> None:
+    def __init__(self, config: UartConfig, parsers: list[MessageParser]) -> None:
         """Inicializa el dispositivo inyectando sus dependencias (DIP).
         Recibe las reglas de configuración y una lista de módulos decodificadores compatibles."""
         # DIP: Inyectamos las dependencias en lugar de crearlas internamente

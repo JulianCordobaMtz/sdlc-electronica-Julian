@@ -2,6 +2,7 @@
 import pytest
 from fsm_demo import TrafficLightFSM, TrafficLightState
 
+
 @pytest.fixture #Crea un semáforo nuevo y limpio para cada prueba, para que no se mezclen
 def fsm():
     return TrafficLightFSM()

@@ -581,6 +581,8 @@ Se aplicó la estructura sugerida creando manualmente las tarjetas directamente 
 Mantener los nombres exactos entre el backlog y las tarjetas evita ambigüedad entre las historias de usuario y las tareas técnicas de desarrollo, permitiendo que el tablero sirva como evidencia fiel del avance del sprint.
 
 
+---
+ 
 ## Semana 3
  
 ### Entrada 1 — Guardar los datos de los sensores en una base de datos real
@@ -591,7 +593,7 @@ Dejar de perder los datos de sensores y lecturas cada vez que se apagaba el serv
  
 #### Herramienta utilizada
  
-`GitHub Copilot`
+`Copilot`
  
 #### Prompt utilizado
  
@@ -619,7 +621,7 @@ Ordenar mi carpeta `app/` para que cada parte del código tuviera su lugar, en v
  
 #### Herramienta utilizada
  
-`GitHub Copilot`
+`Copilot`
  
 #### Prompt utilizado
  
@@ -647,7 +649,7 @@ Que la API no aceptara datos sin sentido, como una humedad imposible o una unida
  
 #### Herramienta utilizada
  
-`GitHub Copilot`
+`Copilot`
  
 #### Prompt utilizado
  
@@ -720,4 +722,3 @@ Descargué la rama de mi compañero, la probé en mi computadora y dejé comenta
 #### Justificación
  
 Revisar con algo concreto que buscar —y no solo decir "se ve bien"— era lo que pedía la actividad, y encontrar ese tipo de mezcla es de los errores más comunes en esta parte del curso.
- 

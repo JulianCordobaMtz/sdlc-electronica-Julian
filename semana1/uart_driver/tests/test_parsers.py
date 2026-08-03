@@ -1,12 +1,12 @@
 import sys
 from pathlib import Path
-import pytest
 
 # Asegurarnos de que el módulo 'parsers.py' en la carpeta padre sea importable.
 # Añadimos el directorio padre (uart_driver) al inicio de sys.path para que
 # pytest pueda encontrar el módulo sin instalarlo como paquete.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from parsers import ModbusParser, NMEAParser
+
 
 # PRUEBAS PARA EL MÓDULO DE DECODIFICADORES
 def test_modbus_parser_trama_valida():
