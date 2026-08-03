@@ -1,25 +1,21 @@
-import os
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-# 1. Leemos la URL de la base de datos desde el entorno, o usamos SQLite por defecto
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///sensorhub.db")
+# 1. Creamos el motor conectando a un archivo local SQLite
+engine = create_engine(
+    "sqlite:///sensorhub.db",
+    connect_args={"check_same_thread": False},
+)
 
-# 2. Configuración específica para SQLite (necesaria para FastAPI en modo local)
-connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
-
-# 3. Creamos el motor de base de datos (Engine)
-engine = create_engine(DATABASE_URL, connect_args=connect_args)
-
-# 4. Creamos la fábrica de sesiones
+# 2. Factory de sesiones
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# 5. Clase base para nuestros modelos ORM (Sintaxis SQLAlchemy 2.0)
+# 3. Clase base de la que heredarán todos tus modelos
 class Base(DeclarativeBase):
     pass
 
-# 6. Función generadora de dependencias para FastAPI
+
+# 4. Generador de dependencias para FastAPI
 def get_db():
     db = SessionLocal()
     try:
