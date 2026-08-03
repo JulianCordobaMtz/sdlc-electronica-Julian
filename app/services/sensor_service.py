@@ -1,44 +1,40 @@
-from fastapi import HTTPException
-from sqlalchemy.orm import Session
-
-from app.schemas.sensor import SensorIn, SensorUpdate
-
-
 class SensorService:
     def __init__(self, repo):
         self.repo = repo
 
-    def crear_sensor(self, db: Session, sensor_in: SensorIn):
-        # Evitar duplicados (Error 409 Conflict)
-        existente = self.repo.get_by_id(db, sensor_in.sensor_id)
-        if existente:
-            raise HTTPException(
-                status_code=409, 
-                detail="El sensor_id ya está registrado"
-            )
-        return self.repo.create(db, sensor_in.model_dump())
+    def create_sensor(self, sensor_in):
+        # 1. Buscamos si el sensor ya existe en la base de datos
+        sensor_existente = self.repo.get_by_id(sensor_in.sensor_id)
+        
+        # 2. Regla de negocio: Si existe, lanzamos excepción nativa de Python
+        if sensor_existente:
+            raise ValueError("El sensor_id ya está registrado")
+        
+        # 3. Si no existe, creamos el sensor
+        return self.repo.create(sensor_in)
 
-    def obtener_sensor(self, db: Session, sensor_id: str):
-        db_sensor = self.repo.get_by_id(db, sensor_id)
-        if not db_sensor or not db_sensor.is_active:
-            raise HTTPException(status_code=404, detail="Sensor no encontrado")
-        return db_sensor
+    def get_sensors(self, limit: int = 50, offset: int = 0):
+        # Listar todos los sensores con soporte de paginación
+        return self.repo.get_all(limit=limit, offset=offset)
 
-    def listar_sensores(self, db: Session, limit: int, offset: int):
-        return self.repo.get_all(db, limit, offset)
+    def get_sensor(self, sensor_id: str):
+        # Buscar un sensor específico
+        sensor = self.repo.get_by_id(sensor_id)
+        if not sensor:
+            raise ValueError("Sensor no encontrado")
+        return sensor
 
-    def actualizar_sensor(
-        self, db: Session, sensor_id: str, sensor_update: SensorUpdate
-    ):
-        db_sensor = self.obtener_sensor(db, sensor_id)
-        update_data = sensor_update.model_dump(exclude_unset=True)
-        if not update_data:
-            raise HTTPException(
-                status_code=400, 
-                detail="No se enviaron datos para actualizar"
-            )
-        return self.repo.update(db, db_sensor, update_data)
+    def update_sensor(self, sensor_id: str, sensor_update):
+        # Actualizar un sensor existente
+        sensor = self.repo.get_by_id(sensor_id)
+        if not sensor:
+            raise ValueError("Sensor no encontrado")
+        return self.repo.update(sensor, sensor_update)
 
-    def eliminar_sensor(self, db: Session, sensor_id: str):
-        db_sensor = self.obtener_sensor(db, sensor_id)
-        self.repo.delete(db, db_sensor)
+    def delete_sensor(self, sensor_id: str):
+        # Eliminar un sensor existente
+        sensor = self.repo.get_by_id(sensor_id)
+        if not sensor:
+            raise ValueError("Sensor no encontrado")
+        self.repo.delete(sensor)
+        return None

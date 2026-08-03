@@ -1,44 +1,60 @@
-
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from app.db import engine
+from app.db import get_db
 from app.repositories.sensor_repo import SensorRepository
 from app.schemas.sensor import SensorIn, SensorOut, SensorUpdate
 from app.services.sensor_service import SensorService
 
-# Agregamos la etiqueta "Sensors" para agruparlo bonito en Swagger
-router = APIRouter(tags=["Sensors"])
-service = SensorService(repo=SensorRepository())
+router = APIRouter(prefix="/sensors", tags=["Sensors"])
 
-def get_db():
-    with Session(engine) as session:
-        yield session
+def get_sensor_service(db: Session = Depends(get_db)) -> SensorService:
+    repo = SensorRepository(db)
+    return SensorService(repo)
 
-@router.post("/sensors", response_model=SensorOut, status_code=status.HTTP_201_CREATED)
-def create_sensor(sensor: SensorIn, db: Session = Depends(get_db)):
-    return service.crear_sensor(db, sensor)
+@router.post("/", response_model=SensorOut, status_code=201)
+def create_sensor(
+    sensor_in: SensorIn,
+    service: SensorService = Depends(get_sensor_service),
+):
+    try:
+        return service.create_sensor(sensor_in)
+    except ValueError as e:
+        raise HTTPException(status_code=409, detail=str(e)) from e
 
-@router.get("/sensors", response_model=list[SensorOut])
+@router.get("/", response_model=list[SensorOut], status_code=200)
 def list_sensors(
-    limit: int = Query(50, ge=1, le=100), 
-    offset: int = Query(0, ge=0),
-    db: Session = Depends(get_db)
+    limit: int = 50,
+    offset: int = 0,
+    service: SensorService = Depends(get_sensor_service),
 ):
-    return service.listar_sensores(db, limit, offset)
+    return service.get_sensors(limit=limit, offset=offset)
 
-@router.get("/sensors/{sensor_id}", response_model=SensorOut)
-def get_sensor(sensor_id: str, db: Session = Depends(get_db)):
-    return service.obtener_sensor(db, sensor_id)
+@router.get("/{sensor_id}", response_model=SensorOut, status_code=200)
+def get_sensor(
+    sensor_id: str, service: SensorService = Depends(get_sensor_service)
+):
+    try:
+        return service.get_sensor(sensor_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
 
-@router.patch("/sensors/{sensor_id}", response_model=SensorOut)
+@router.patch("/{sensor_id}", response_model=SensorOut, status_code=200)
 def update_sensor(
-    sensor_id: str, 
-    sensor_update: SensorUpdate, 
-    db: Session = Depends(get_db)
+    sensor_id: str,
+    sensor_update: SensorUpdate,
+    service: SensorService = Depends(get_sensor_service),
 ):
-    return service.actualizar_sensor(db, sensor_id, sensor_update)
+    try:
+        return service.update_sensor(sensor_id, sensor_update)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
 
-@router.delete("/sensors/{sensor_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_sensor(sensor_id: str, db: Session = Depends(get_db)):
-    service.eliminar_sensor(db, sensor_id)
+@router.delete("/{sensor_id}", status_code=204)
+def delete_sensor(
+    sensor_id: str, service: SensorService = Depends(get_sensor_service)
+):
+    try:
+        service.delete_sensor(sensor_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
