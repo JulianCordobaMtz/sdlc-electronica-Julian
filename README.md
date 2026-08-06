@@ -21,4 +21,4 @@ Cumpliendo con los requerimientos, la bitácora contiene el registro detallado d
 ## Tecnologías Utilizadas
 * **Lenguaje:** Python 3.x
 * **Testing:** Pytest (Mocks, validación de excepciones e Inyección de Dependencias)
-* **Paradigma:** Programación Orientada a Objetos (POO) y Clean Architecture
+* **Paradigma:** Programación Orientada a Objetos (POO) y Clean Architecture.
