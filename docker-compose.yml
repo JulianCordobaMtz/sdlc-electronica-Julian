@@ -1,0 +1,28 @@
+services:
+  # Servicio 1: El motor de base de datos PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: sensorhub-db
+    environment:
+      POSTGRES_USER: sensorhub_user
+      POSTGRES_PASSWORD: sensorhub_password
+      POSTGRES_DB: sensorhub_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Servicio 2: FastAPI
+  api:
+    build: .
+    container_name: sensorhub-api
+    ports:
+      - "8000:8000"
+    environment:
+      # Usamos el nombre del servicio de red "db" en lugar de "localhost" [9]
+      - DATABASE_URL=postgresql+psycopg://sensorhub_user:sensorhub_password@db:5432/sensorhub_db
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
