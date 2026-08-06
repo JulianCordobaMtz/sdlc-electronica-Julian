@@ -1,3 +1,4 @@
+# SensorHub API [![CI](https://github.com/[TU_USUARIO_DE_GITHUB]/[NOMBRE_DE_TU_REPOSITORIO]/actions/workflows/ci.yml/badge.svg)](https://github.com/JulianCordobaMtz]/[sdlc-electronica-Julian]/actions)
 # sdlc-electronica-Julian
 # Trabajo Driver UART
 

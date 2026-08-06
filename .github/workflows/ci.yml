@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Descargar el código del repositorio al servidor temporal de GitHub
+      - name: Checkout de código
+        uses: actions/checkout@v4
+
+      # 2. Configurar la versión correcta de Python 
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: 'pip' # Acelera subsecuentes ejecuciones guardando dependencias en caché
+
+      # 3. Instalar librerías de tu app y las herramientas de calidad
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-cov ruff mypy
+
+      # 4. Verificar estilo y malas prácticas (Linter con Ruff)
+      - name: Ejecutar Linter (Ruff)
+        run: ruff check .
+
+      # 5. Comprobar que no haya errores de tipos estáticos (Mypy)
+      - name: Verificar Tipado (Mypy)
+        run: mypy app --ignore-missing-imports
+
+      # 6. Correr las pruebas unitarias y exigir cobertura mínima del 80%
+      - name: Ejecutar Pruebas (Pytest)
+        run: pytest --cov=app --cov-fail-under=80
