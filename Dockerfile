@@ -32,4 +32,4 @@ COPY ./app /workspace/app
 EXPOSE 8000
 
 # 10. Comando de ejecución que arranca tu servidor web Uvicorn escuchando en todas las interfaces de red (0.0.0.0)
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000"]
