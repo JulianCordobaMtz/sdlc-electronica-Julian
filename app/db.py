@@ -24,3 +24,11 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 # 6. Clase base para los modelos ORM
 class Base(DeclarativeBase):
     pass
+
+# 7. Dependencia para obtener la sesión de la base de datos (¡Restaurada!)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
