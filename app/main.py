@@ -10,6 +10,9 @@ from app.routers import (  # IMPORTANTE: importar el nuevo router
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="SensorHub API", version="0.1.0")
+@app.get("/health")
+def health() -> dict[str, str]:
+    return {"status": "ok"}
 
 # Registramos ambas rutas
 app.include_router(sensor_router.router)
