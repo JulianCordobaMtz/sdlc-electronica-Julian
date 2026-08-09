@@ -40,3 +40,11 @@ jobs:
       # 6. Correr las pruebas unitarias y exigir cobertura mínima del 80%
       - name: Ejecutar Pruebas (Pytest)
         run: pytest --cov=app --cov-fail-under=80
+
+          # 7. Desplegar automáticamente en Render si los tests pasan
+      - name: Redeploy en Render
+        if: success()
+        run: |
+          curl -X POST "https://api.render.com/v1/services/srv-d9qiikrm8hqs738hlnng\
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Accept: application/json"
