@@ -22,3 +22,12 @@ Cumpliendo con los requerimientos, la bitácora contiene el registro detallado d
 * **Lenguaje:** Python 3.x
 * **Testing:** Pytest (Mocks, validación de excepciones e Inyección de Dependencias)
 * **Paradigma:** Programación Orientada a Objetos (POO) y Clean Architecture.
+
+
+##  Despliegue y Estado del Proyecto
+
+Aquí se puede monitorear el estado de la integración continua y probar la API de SensorHub activa en producción:
+
+### API en Producción (Render)
+***Documentación Interactiva (Swagger UI):** [https://sensorhub-api-julian.onrender.com/docs](https://sensorhub-api-julian.onrender.com/docs)
+***Endpoint de Salud (Health Check):** [https://sensorhub-api-julian.onrender.com/health](https://sensorhub-api-julian.onrender.com/health)
