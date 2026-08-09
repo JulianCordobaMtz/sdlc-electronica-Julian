@@ -722,3 +722,175 @@ Descargué la rama de mi compañero, la probé en mi computadora y dejé comenta
 #### Justificación
  
 Revisar con algo concreto que buscar —y no solo decir "se ve bien"— era lo que pedía la actividad, y encontrar ese tipo de mezcla es de los errores más comunes en esta parte del curso.
+
+
+---
+
+## Semana 4
+
+### Entrada 1 — Control de versiones de la base de datos con Alembic
+
+#### Objetivo
+
+Dejar de depender de que SQLAlchemy creara las tablas automáticamente al arrancar la app, y tener un historial de los cambios que le hago a la base de datos.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Ya no quiero que mi base de datos se cree automáticamente cada vez que arranca mi app con Base.metadata.create_all. Ayúdame a instalar Alembic, conectarlo con mis modelos de SQLAlchemy y generar mi primera migración a partir de lo que ya tengo.
+
+#### Propuesta de la IA
+
+Copilot me guio para instalar e inicializar Alembic, me ayudó a importar mi `Base` dentro del archivo `env.py` para que Alembic supiera de qué modelos generar los cambios, y generó la primera migración automática con el comando `alembic revision --autogenerate`.
+
+#### Decisión y cambios realizados
+
+Apliqué esa primera migración con `alembic upgrade head` y confirmé que las tablas se crearan desde ese script y no desde el arranque de la aplicación.
+
+#### Justificación
+
+Si sigo dejando que la app cree las tablas sola, no tengo forma de saber qué cambió entre una versión y otra, ni de deshacer un cambio si algo sale mal. Con Alembic, cualquier cambio futuro a mis modelos (como agregar un campo a Sensor) queda registrado y se puede revisar o revertir.
+
+---
+
+### Entrada 2 — Contenedores, PostgreSQL y Docker Compose
+
+#### Objetivo
+
+Dejar SQLite (que es solo un archivo local) y pasar a PostgreSQL, además de asegurar que toda mi aplicación corra igual en cualquier computadora usando contenedores.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Necesito pasar mi base de datos de SQLite a PostgreSQL y levantar todo con Docker. Ayúdame a escribir el Dockerfile de mi API, cambiar la conexión de mi app para que apunte a Postgres, y armar un docker-compose.yml que levante tanto mi API como la base de datos con un solo comando.
+
+#### Propuesta de la IA
+
+Copilot me dio el Dockerfile con la imagen base de Python, la copia de mi `requirements.txt`, la instalación de dependencias y el comando de arranque con uvicorn. Después armó el `docker-compose.yml` con dos servicios: uno llamado `db` (con la imagen oficial de Postgres) y otro llamado `api` (construido desde mi Dockerfile), y me explicó cómo usar un volumen para que los datos de Postgres no se perdieran cada vez que apagara el contenedor.
+
+#### Decisión y cambios realizados
+
+Levanté todo con `docker compose up -d`, verifiqué que la API se conectara correctamente a la base de datos dentro del contenedor, y dejé las credenciales de Postgres como variables de entorno en vez de escribirlas directo en el archivo.
+
+#### Justificación
+
+Tener la API y la base de datos como dos servicios separados, pero conectados entre sí, es justo cómo se ve un proyecto real en producción, y usar variables de entorno para las credenciales evita dejarlas visibles dentro del repositorio.
+
+---
+
+### Entrada 3 — Integración continua con GitHub Actions
+
+#### Objetivo
+
+Que cada commit o Pull Request se revisara automáticamente antes de llegar a la rama `main`, sin que yo tuviera que acordarme de correr las pruebas a mano.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Ayúdame a crear el workflow de GitHub Actions en .github/workflows/ci.yml, para que cada vez que suba un cambio, un servidor de GitHub instale Python, instale mis dependencias y corra mis pruebas con pytest.
+
+#### Propuesta de la IA
+
+Copilot me ayudó a definir los pasos del workflow: preparar el sistema, instalar Python, instalar dependencias y ejecutar pytest. La primera versión que armamos tenía errores de indentación en el YAML que hacían que el archivo no se leyera bien.
+
+#### Decisión y cambios realizados
+
+Subí el archivo, revisé los errores que marcaba GitHub Actions, y fui corrigiendo la indentación junto con la IA hasta que el flujo corrió completo y el check quedó en verde.
+
+#### Justificación
+
+Un archivo YAML mal indentado puede parecer un detalle mínimo, pero hace que todo el workflow falle sin ejecutar ni un solo paso; corregirlo era necesario para poder confiar en que cada cambio futuro se revisara solo, sin depender de que yo corriera las pruebas manualmente.
+
+---
+
+### Entrada 4 — Infraestructura como código y despliegue en Render
+
+#### Objetivo
+
+Publicar mi API y mi base de datos en internet, definiendo esa infraestructura en un archivo en vez de configurarla a mano dando clics en Render.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Quiero desplegar mi API junto con una base de datos PostgreSQL en Render, pero usando un archivo render.yaml en vez de configurar todo manualmente. Ayúdame a definir ahí los dos recursos y a conectar la base de datos con mi API.
+
+#### Propuesta de la IA
+
+Copilot me ayudó a escribir el `render.yaml` definiendo dos recursos: una base de datos PostgreSQL administrada por Render y un Web Service para mi API de FastAPI, y me mostró cómo pasar la variable `DATABASE_URL` de la base de datos hacia el servicio de la API para que quedaran conectados.
+
+#### Decisión y cambios realizados
+
+Conecté mi repositorio a Render, dejé que la plataforma leyera el `render.yaml`, y esperé a que construyera ambos servicios. Confirmé que mi API respondiera desde su nueva URL pública en HTTPS.
+
+#### Justificación
+
+Definir la infraestructura en un archivo, significa que toda la configuración de mis servicios queda guardada como parte del proyecto, y no depende de que yo recuerde cómo configuré todo la primera vez.
+
+---
+
+### Entrada 5 — Cuidar los datos sensibles y entender los entornos local vs. producción
+
+#### Objetivo
+
+Proteger las contraseñas y datos sensibles de mi proyecto, y entender bien la diferencia entre mi entorno local y el de producción.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Ayúdame a revisar mi .gitignore para asegurarme de que mi archivo .env (donde tengo las contraseñas de mi Postgres local), la carpeta venv y el caché de Python nunca se suban al repositorio. También quiero entender por qué los secretos de producción no deben estar en mi código.
+
+#### Propuesta de la IA
+
+Copilot revisó mi `.gitignore` y confirmó que `.env`, `venv/` y `__pycache__` ya estaban bloqueados, y me explicó que en un entorno real (Site Reliability Engineering) los secretos de producción nunca viven en el código fuente, sino que se inyectan directamente desde la plataforma donde corre la aplicación, en este caso Render.
+
+#### Decisión y cambios realizados
+
+Dejé mi configuración de forma que la app lea las variables de entorno sin importar de dónde vengan: si corre localmente usa mi archivo `.env` con Postgres de Docker, y si corre en Render usa las variables que la plataforma le inyecta.
+
+#### Justificación
+
+Que mi aplicación no tenga que saber si está en mi computadora o en producción, y que la diferencia esté solo en de dónde vienen sus variables de entorno, es la misma idea de inyección de dependencias que ya había usado en la arquitectura de mi código, pero aplicada ahora a la configuración.
+
+---
+
+### Entrada 6 — Corregir seguridad y el pipeline de CI/CD
+ 
+#### Objetivo
+ 
+Resolver dos pendientes que seguían marcados como incompletos: seguridad de la configuración y despliegue continuo, aunque el código ya funcionaba bien.
+ 
+#### Herramienta utilizada
+ 
+`GitHub Copilot`
+ 
+#### Prompt utilizado
+ 
+> Mi revisión automática sigue marcando problemas en seguridad y en el despliegue continuo, aunque mi código funciona. Ayúdame a revisar si mi docker-compose.yml tiene contraseñas escritas directamente, cómo limpiar mi historial de Git si llegué a subir alguna, y por qué mi archivo ci.yml no está funcionando como debería.
+ 
+#### Propuesta de la IA
+ 
+Copilot revisó mi `docker-compose.yml` y confirmó que las credenciales debían moverse a un archivo `.env`; me explicó cómo usar herramientas como BFG Repo-Cleaner o `git filter-repo` para borrar del historial rastros antiguos de mi usuario y contraseña de PostgreSQL (`POSTGRES_USER` y `POSTGRES_PASSWORD`); y detectó que mi `ci.yml` tenía dos bloques de `steps:` dentro del mismo job, lo cual hacía que el segundo bloque no se ejecutara. También propuso agregar, al final del pipeline, un paso de despliegue automático a Render usando el `RENDER_API_KEY` y el `serviceId` de mi servicio, condicionado a que las pruebas pasaran primero.
+ 
+#### Decisión y cambios realizados
+ 
+Uní los dos bloques de `steps` en uno solo (checkout, instalación de Python, dependencias, lint, mypy, pytest), agregué el paso de despliegue condicionado al éxito de las pruebas, y limpié el historial de Git de las credenciales antiguas.
+ 
+#### Justificación
+ 
+No era que el código estuviera mal, sino que un detalle de formato en el archivo YAML impedía que todo el flujo se ejecutara completo, y tener contraseñas visibles en el historial de Git sigue siendo un riesgo aunque ya no estén en el código actual — por eso había que limpiarlas, no solo quitarlas del archivo. Con esto quedaron cubiertos los criterios de Pipeline de CI y Despliegue continuo de la rúbrica de esta semana.
+ 
