@@ -45,6 +45,6 @@ jobs:
       - name: Redeploy en Render
         if: success()
         run: |
-          curl -X POST "https://api.render.com/v1/services/srv-d9qiikrm8hqs738hlnng\
+          curl -X POST https://api.render.com/v1/services/srv-d9qiikrm8hqs738hlnng/deploys \
           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
           -H "Accept: application/json"
