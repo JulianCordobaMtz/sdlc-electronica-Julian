@@ -17,3 +17,4 @@ def health() -> dict[str, str]:
 # Registramos ambas rutas
 app.include_router(sensor_router.router)
 app.include_router(reading_router.router)
+#Prueba para verificar que el despliegue en Render funciona correctamente
