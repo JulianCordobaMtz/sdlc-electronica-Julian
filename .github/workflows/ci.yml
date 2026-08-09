@@ -7,8 +7,16 @@ on:
     branches: [ main ]
   workflow_dispatch: 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
+    steps:
+      - name: Redeploy Render
+        run: |
+          curl -X POST \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Content-Type: application/json" \
+          -d '{"serviceId":"srv-d9qiikrm8hqs738hlnng"}' \
+          https://api.render.com/v1/services/srv-d9qiikrm8hqs738hlnng/deploys
 
     steps:
       # 1. Descargar el código del repositorio al servidor temporal de GitHub
