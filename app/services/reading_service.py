@@ -5,7 +5,7 @@ from app.services.anomaly_detector import AnomalyDetector, ConsoleAlertStrategy
 
 
 class ReadingService:
-    def __init__(self, repo, detector: AnomalyDetector = None):
+    def __init__(self, repo, detector: AnomalyDetector | None = None):
         # El servicio recibe el repositorio inyectado
         self.repo = repo
         # Si no se pasa un detector, creamos uno por defecto con alertas a consola
