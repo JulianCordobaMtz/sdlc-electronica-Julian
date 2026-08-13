@@ -1,12 +1,13 @@
 # tests/test_conversions.py
-import pytest
 import math
+
+import pytest
 from pytest import approx
 
 from semana5.conversions import (
 	celsius_to_fahrenheit,
-	fahrenheit_to_celsius,
 	celsius_to_kelvin,
+	fahrenheit_to_celsius,
 	kelvin_to_celsius,
 )
 
@@ -82,9 +83,11 @@ def test_precision_limite_infinitesimal_cero_absoluto():
 
 
 def test_conversions_nan_handling():
-    """Test 2: Documenta el comportamiento de las funciones ante un valor NaN (Not a Number).
-    Debido a que Python evalúa (NaN < Límite) como False, la función no lanza
-    ValueError por default, sino que propaga el NaN aritméticamente.
+    """Test 2: Documenta el comportamiento de las funciones ante un valor NaN.
+
+    (Not a Number). Debido a que Python evalúa (NaN < Límite) como False, la
+    función no lanza ValueError por default, sino que propaga el NaN
+    aritméticamente.
     """
     nan_val = float("nan")
     
@@ -116,12 +119,14 @@ def test_conversions_infinity_handling():
 
 
 def test_dynamic_type_evasion_at_runtime():
-    """Test 4: Simula la evasión del tipado estático (Type Hints) en tiempo de ejecución.
-    Verifica que la lógica física del intérprete lance un TypeError de forma nativa
-    si se le intentan inyectar tipos de datos no matemáticos incompatibles con la conversión.
+    """Test 4: Simula la evasión del tipado estático en tiempo de ejecución.
+
+    (Type Hints). Verifica que la lógica física del intérprete lance un
+    TypeError de forma nativa si se le intentan inyectar tipos de datos no
+    matemáticos incompatibles con la conversión.
     """
     with pytest.raises(TypeError):
-        # Evasión dinámica de tipo string para simular un sensor enviando basura de texto
+        # Evasión dinámica de tipo string para simular un sensor enviando texto
         celsius_to_fahrenheit("temperatura_critica")  # type: ignore
 
     with pytest.raises(TypeError):
