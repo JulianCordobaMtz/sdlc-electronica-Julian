@@ -1,6 +1,6 @@
 # app/services/anomaly_detector.py
 from abc import ABC, abstractmethod
-from typing import List, Dict
+
 
 # =====================================================================
 # INTERFAZ / ABSTRACCIÓN DE LA ESTRATEGIA (Principio DIP / ISP)
@@ -34,7 +34,7 @@ class InMemoryAlertStorageStrategy(AlertNotificationStrategy):
     en memoria para propósitos de pruebas o consultas rápidas.
     """
     def __init__(self) -> None:
-        self.alerts: List[Dict[str, float | str]] = []
+        self.alerts: list[dict[str, float | str]] = []
 
     def notify(self, sensor_id: str, value: float, threshold: float) -> None:
         self.alerts.append({

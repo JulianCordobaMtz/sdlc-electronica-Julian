@@ -1,12 +1,13 @@
 # tests/test_conversions.py
-import pytest
 import math
+
+import pytest
 from pytest import approx
 
 from semana5.conversions import (
 	celsius_to_fahrenheit,
-	fahrenheit_to_celsius,
 	celsius_to_kelvin,
+	fahrenheit_to_celsius,
 	kelvin_to_celsius,
 )
 
@@ -82,12 +83,13 @@ def test_precision_limite_infinitesimal_cero_absoluto():
 
 
 def test_conversions_nan_handling():
-    """Test 2: Documenta el comportamiento de las funciones ante un valor NaN (Not a Number).
+    """Test 2: Documenta el comportamiento de las funciones ante un valor NaN.
+
     Debido a que Python evalúa (NaN < Límite) como False, la función no lanza
     ValueError por default, sino que propaga el NaN aritméticamente.
     """
     nan_val = float("nan")
-    
+
     # Verificamos que no lanza ValueError, sino que retorna NaN por propagación
     assert math.isnan(celsius_to_fahrenheit(nan_val))
     assert math.isnan(fahrenheit_to_celsius(nan_val))
@@ -97,8 +99,10 @@ def test_conversions_nan_handling():
 
 def test_conversions_infinity_handling():
     """Test 3: Evalúa el comportamiento ante infinitos de punto flotante.
+
     Un infinito positivo es aritméticamente válido, pero un infinito negativo
-    está físicamente por debajo del cero absoluto y debe ser bloqueado con ValueError.
+    está físicamente por debajo del cero absoluto y debe ser bloqueado con
+    ValueError.
     """
     pos_inf = float("inf")
     neg_inf = float("-inf")
@@ -110,18 +114,20 @@ def test_conversions_infinity_handling():
     # Caso de error extremo (Infinito negativo dispara ValueError)
     with pytest.raises(ValueError, match="por debajo del cero absoluto"):
         celsius_to_fahrenheit(neg_inf)
-        
+
     with pytest.raises(ValueError, match="por debajo del cero absoluto"):
         fahrenheit_to_celsius(neg_inf)
 
 
 def test_dynamic_type_evasion_at_runtime():
-    """Test 4: Simula la evasión del tipado estático (Type Hints) en tiempo de ejecución.
-    Verifica que la lógica física del intérprete lance un TypeError de forma nativa
-    si se le intentan inyectar tipos de datos no matemáticos incompatibles con la conversión.
+    """Test 4: Simula la evasión del tipado estático en tiempo de ejecución.
+
+    Verifica que la lógica física del intérprete lance un TypeError de forma
+    nativa si se le intentan inyectar tipos de datos no matemáticos
+    incompatibles con la conversión.
     """
     with pytest.raises(TypeError):
-        # Evasión dinámica de tipo string para simular un sensor enviando basura de texto
+        # Evasión dinámica de tipo string para simular un sensor enviando texto
         celsius_to_fahrenheit("temperatura_critica")  # type: ignore
 
     with pytest.raises(TypeError):

@@ -1,21 +1,18 @@
 # tests/test_anomalies.py
-import pytest
-from typing import List
 
 # NOTA: Importamos clases que AÚN NO EXISTEN.
 # Tu suite de pytest va a fallar al correr 
 from app.services.anomaly_detector import (
-    AnomalyDetector,
     AlertNotificationStrategy,
-    ConsoleAlertStrategy,
-    InMemoryAlertStorageStrategy,
+    AnomalyDetector,
 )
+
 
 # 1. Creamos un mock/doble de prueba para verificar que la alerta se notifica
 class SpyAlertStrategy(AlertNotificationStrategy):
     """Estrategia espía para verificar en los tests si se disparó la notificación."""
     def __init__(self):
-        self.alerts_sent: List[str] = []
+        self.alerts_sent: list[str] = []
 
     def notify(self, sensor_id: str, value: float, threshold: float) -> None:
         self.alerts_sent.append(f"ALERTA: {sensor_id} superó {threshold} con {value}")

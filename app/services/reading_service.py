@@ -1,6 +1,8 @@
 from app.schemas.reading import SensorReadingIn, SensorReadingUpdate
+
 # Importamos el detector y la estrategia de consola por defecto
 from app.services.anomaly_detector import AnomalyDetector, ConsoleAlertStrategy
+
 
 class ReadingService:
     def __init__(self, repo, detector: AnomalyDetector = None):
@@ -14,19 +16,24 @@ class ReadingService:
     ):
         # 1. Guardamos la lectura en la base de datos
         db_reading = self.repo.create(sensor_id, reading_in.model_dump())
-        
-        # 2. Obtenemos el sensor asociado directamente desde la lectura (relación ORM)
-        # Usamos getattr por seguridad para que los repositorios de prueba (fakes) no truenen
+
+        # 2. Obtenemos el sensor asociado directamente desde la lectura
+        # (relación ORM). Usamos getattr por seguridad para que los
+        # repositorios de prueba (fakes) no truenen.
         sensor = getattr(db_reading, "sensor", None)
-        
+
         # 3. Si el sensor existe y tiene un umbral configurado, evaluamos la anomalía
-        if sensor and hasattr(sensor, "alert_threshold") and sensor.alert_threshold is not None:
+        if (
+            sensor
+            and hasattr(sensor, "alert_threshold")
+            and sensor.alert_threshold is not None
+        ):
             self.detector.evaluate(
                 sensor_id=sensor_id,
                 value=db_reading.value,
-                threshold=sensor.alert_threshold
+                threshold=sensor.alert_threshold,
             )
-            
+
         return db_reading
             
 
