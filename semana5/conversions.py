@@ -19,7 +19,11 @@ def celsius_to_fahrenheit(c: float) -> float:
 	Lanza ValueError si `c` está por debajo del cero absoluto (-273.15 °C).
 	"""
 	if c < ABSOLUTE_ZERO_C_IN_C:
-		raise ValueError(f"Temperatura en Celsius ({c}) por debajo del cero absoluto ({ABSOLUTE_ZERO_C_IN_C} °C)")
+		msg = (
+			f"Temperatura en Celsius ({c}) por debajo del "
+			f"cero absoluto ({ABSOLUTE_ZERO_C_IN_C} °C)"
+		)
+		raise ValueError(msg)
 	return c * 9.0 / 5.0 + 32.0
 
 
@@ -29,7 +33,11 @@ def fahrenheit_to_celsius(f: float) -> float:
 	Lanza ValueError si `f` está por debajo del cero absoluto (-459.67 °F).
 	"""
 	if f < ABSOLUTE_ZERO_F_IN_F:
-		raise ValueError(f"Temperatura en Fahrenheit ({f}) por debajo del cero absoluto ({ABSOLUTE_ZERO_F_IN_F} °F)")
+		msg = (
+			f"Temperatura en Fahrenheit ({f}) por debajo del "
+			f"cero absoluto ({ABSOLUTE_ZERO_F_IN_F} °F)"
+		)
+		raise ValueError(msg)
 	return (f - 32.0) * 5.0 / 9.0
 
 
@@ -39,7 +47,11 @@ def celsius_to_kelvin(c: float) -> float:
 	Lanza ValueError si `c` está por debajo del cero absoluto (-273.15 °C).
 	"""
 	if c < ABSOLUTE_ZERO_C_IN_C:
-		raise ValueError(f"Temperatura en Celsius ({c}) por debajo del cero absoluto ({ABSOLUTE_ZERO_C_IN_C} °C)")
+		msg = (
+			f"Temperatura en Celsius ({c}) por debajo del "
+			f"cero absoluto ({ABSOLUTE_ZERO_C_IN_C} °C)"
+		)
+		raise ValueError(msg)
 	return c + 273.15
 
 
@@ -49,7 +61,11 @@ def kelvin_to_celsius(k: float) -> float:
 	Lanza ValueError si `k` está por debajo de 0 K.
 	"""
 	if k < ABSOLUTE_ZERO_K_IN_K:
-		raise ValueError(f"Temperatura en Kelvin ({k}) por debajo del cero absoluto ({ABSOLUTE_ZERO_K_IN_K} K)")
+		msg = (
+			f"Temperatura en Kelvin ({k}) por debajo del "
+			f"cero absoluto ({ABSOLUTE_ZERO_K_IN_K} K)"
+		)
+		raise ValueError(msg)
 	return k - 273.15
 
 
