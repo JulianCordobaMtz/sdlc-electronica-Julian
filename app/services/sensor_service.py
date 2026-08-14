@@ -1,42 +1,55 @@
+from typing import Protocol
+import math
+from app.schemas.sensor import SensorIn, SensorUpdate
+
+class SensorRepositoryProtocol(Protocol):
+    def get_by_id(self, sensor_id: str) -> SensorModel | None: ...
+    def create(self, sensor_in: SensorIn) -> SensorModel: ...
+    def update(self, sensor: SensorModel, sensor_update: SensorUpdate) -> SensorModel: ...
+    def delete(self, sensor: SensorModel) -> None: ...
+
 class SensorService:
-    def __init__(self, repo):
-        # El servicio no crea el repositorio.
-        # Recibe el repositorio ya inyectado por el router.
+    def __init__(self, repo: SensorRepositoryProtocol):
         self.repo = repo
 
-    def create_sensor(self, sensor_in):
-        # 1. Buscamos si el sensor ya existe en la base de datos
-        sensor_existente = self.repo.get_by_id(sensor_in.sensor_id)
+    def create_sensor(self, sensor_in: SensorIn):
+        # Validación de sensor_id
+        sensor_id = sensor_in.sensor_id
+        if not sensor_id or not sensor_id.strip():
+            raise ValueError("El sensor_id no puede ser None, vacío o solo espacios")
         
-        # 2. Regla de negocio: Si existe, lanzamos excepción nativa de Python
-        if sensor_existente:
-            raise ValueError("El sensor_id ya está registrado")
+        # Validación de umbral de alerta
+        if hasattr(sensor_in, 'alert_threshold') and not math.isfinite(sensor_in.alert_threshold):
+            raise ValueError("El umbral de alerta debe ser un número finito")
         
-        # 3. Si no existe, creamos el sensor
+        # Crear sensor
         return self.repo.create(sensor_in)
 
     def get_sensors(self, limit: int = 50, offset: int = 0):
-        # Listar todos los sensores con soporte de paginación
         return self.repo.get_all(limit=limit, offset=offset)
 
     def get_sensor(self, sensor_id: str):
-        # Buscar un sensor específico
         sensor = self.repo.get_by_id(sensor_id)
         if not sensor:
             raise ValueError("Sensor no encontrado")
         return sensor
 
-    def update_sensor(self, sensor_id: str, sensor_update):
-        # Actualizar un sensor existente
+    def update_sensor(self, sensor_id: str, sensor_update: SensorUpdate):
+        # Validación de umbral de alerta
+        if hasattr(sensor_update, 'alert_threshold') and not math.isfinite(sensor_update.alert_threshold):
+            raise ValueError("El umbral de alerta debe ser un número finito")
+        
+        # Filtrar campo inmutable (sensor_id)
+        update_data = sensor_update.dict(exclude={'sensor_id'})
         sensor = self.repo.get_by_id(sensor_id)
         if not sensor:
             raise ValueError("Sensor no encontrado")
-        return self.repo.update(sensor, sensor_update)
+        return self.repo.update(sensor, update_data)
 
     def delete_sensor(self, sensor_id: str):
-        # Eliminar un sensor existente
         sensor = self.repo.get_by_id(sensor_id)
         if not sensor:
             raise ValueError("Sensor no encontrado")
-        self.repo.delete(sensor)
-        return None
+        # Borrado lógico
+        sensor.is_active = False
+        return self.repo.update(sensor, {})
