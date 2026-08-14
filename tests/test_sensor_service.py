@@ -53,6 +53,7 @@ def test_create_sensor_invalid_id_rejected(sensor_service: SensorService):
     # Intentar con ID vacío
     invalid_sensor = SensorIn(
         sensor_id="",
+        name="Sensor de prueba",  # Agregado
         location="Bodega A",
         type="temperatura",
         alert_threshold=30.0
@@ -66,6 +67,7 @@ def test_create_sensor_invalid_id_rejected(sensor_service: SensorService):
     # Intentar con ID que contiene solo espacios en blanco
     spaces_sensor = SensorIn(
         sensor_id="   ",
+        name="Sensor de prueba",  # Agregado
         location="Bodega A",
         type="temperatura",
         alert_threshold=30.0
@@ -82,6 +84,7 @@ def test_create_sensor_nan_threshold_rejected(sensor_service: SensorService):
     # Intentar con NaN (Not a Number)
     nan_sensor = SensorIn(
         sensor_id="TEMP-01",
+        name="Sensor de prueba",  # Agregado
         location="Bodega A",
         type="temperatura",
         alert_threshold=float("nan")
@@ -95,6 +98,7 @@ def test_create_sensor_nan_threshold_rejected(sensor_service: SensorService):
     # Intentar con Infinito positivo
     inf_sensor = SensorIn(
         sensor_id="TEMP-02",
+        name="Sensor de prueba",  # Agregado
         location="Bodega A",
         type="temperatura",
         alert_threshold=float("inf")
@@ -111,6 +115,7 @@ def test_sensor_soft_delete_preserves_historical_data(sensor_service: SensorServ
     # Crear un sensor activo inicialmente
     new_sensor = SensorIn(
         sensor_id="TEMP-03",
+        name="Sensor de prueba",  # Agregado
         location="Bodega B",
         type="temperatura",
         alert_threshold=35.0
@@ -131,6 +136,7 @@ def test_update_sensor_blocks_immutable_fields(sensor_service: SensorService):
     # Crear sensor base
     new_sensor = SensorIn(
         sensor_id="TEMP-04",
+        name="Sensor de prueba",  # Agregado
         location="Bodega C",
         type="temperatura",
         alert_threshold=28.0
