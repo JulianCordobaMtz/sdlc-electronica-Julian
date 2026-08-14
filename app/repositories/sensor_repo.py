@@ -1,12 +1,13 @@
+from typing import Any
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.sensor import SensorModel
-from app.schemas.sensor import SensorIn, SensorUpdate
+from app.schemas.sensor import SensorIn
 
 
 class SensorRepository:
-    # ¡ESTE ES EL MÉTODO QUE FALTABA Y CAUSABA EL ERROR!
     # Ahora el repositorio sí acepta la base de datos (db) que le manda el router
     def __init__(self, db: Session):
         self.db = db
@@ -27,8 +28,7 @@ class SensorRepository:
         self.db.refresh(nuevo_sensor)
         return nuevo_sensor
 
-    def update(self, sensor: SensorModel, sensor_update: SensorUpdate) -> SensorModel:
-        update_data = sensor_update.model_dump(exclude_unset=True)
+    def update(self, sensor: SensorModel, update_data: dict[str, Any]) -> SensorModel:
         for key, value in update_data.items():
             setattr(sensor, key, value)
         self.db.commit()
