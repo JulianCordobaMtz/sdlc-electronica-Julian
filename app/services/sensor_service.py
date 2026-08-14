@@ -1,6 +1,7 @@
 from typing import Protocol
 import math
 from app.schemas.sensor import SensorIn, SensorUpdate
+from app.models.sensor import SensorModel
 
 class SensorRepositoryProtocol(Protocol):
     def get_by_id(self, sensor_id: str) -> SensorModel | None: ...
