@@ -1,10 +1,11 @@
 import math
-from typing import Any, Protocol
+from typing import Any, Protocol, runtime_checkable
 
 from app.models.sensor import SensorModel
 from app.schemas.sensor import SensorIn, SensorUpdate
 
 
+@runtime_checkable
 class SensorRepositoryProtocol(Protocol):
     def get_by_id(self, sensor_id: str) -> SensorModel | None: ...
     def get_all(
