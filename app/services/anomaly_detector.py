@@ -62,3 +62,18 @@ class AnomalyDetector:
         # Regla de negocio: si el valor es estrictamente mayor que el umbral 
         if value > threshold:
             self.strategy.notify(sensor_id, value, threshold)
+
+class DatabaseAlertStrategy(AlertNotificationStrategy):
+    """Estrategia concreta que persiste las alertas directamente en la base de datos."""
+    def __init__(self, alert_repo) -> None:
+        self.alert_repo = alert_repo
+
+    def notify(self, sensor_id: str, value: float, threshold: float) -> None:
+        from app.models.alert import AlertModel
+        alert = AlertModel(
+            sensor_id=sensor_id,
+            value=value,
+            threshold=threshold,
+            status="open"
+        )
+        self.alert_repo.create(alert)

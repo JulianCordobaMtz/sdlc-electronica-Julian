@@ -12,9 +12,18 @@ router = APIRouter()
 
 
 def get_reading_service(db: Session = Depends(get_db)) -> ReadingService:
-    """Inyecta una instancia fresca de ReadingService con su repositorio."""
+    """Inyecta una instancia fresca de ReadingService con su repositorio
+    y el detector de anomalías configurado para persistir alertas en base de datos.
+    """
+    from app.repositories.alert_repository import AlertRepository
+    from app.services.anomaly_detector import AnomalyDetector, DatabaseAlertStrategy
+
     repo = ReadingRepository(db)
-    return ReadingService(repo)
+    alert_repo = AlertRepository(db)
+    strategy = DatabaseAlertStrategy(alert_repo)
+    detector = AnomalyDetector(strategy)
+
+    return ReadingService(repo, detector=detector)
 
 
 # 1. CREATE
