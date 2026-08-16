@@ -1,10 +1,12 @@
 from fastapi import Depends
 from sqlalchemy.orm import Session
+
 from app.db import get_db
-from app.repositories.reading_repo import ReadingRepository
 from app.repositories.alert_repository import AlertRepository
-from app.services.reading_service import ReadingService
+from app.repositories.reading_repo import ReadingRepository
 from app.services.anomaly_detector import AnomalyDetector, DatabaseAlertStrategy
+from app.services.reading_service import ReadingService
+
 
 def get_reading_service(db: Session = Depends(get_db)) -> ReadingService:
     """Inyecta una instancia fresca de ReadingService con su repositorio

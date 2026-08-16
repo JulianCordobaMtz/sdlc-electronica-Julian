@@ -1,11 +1,9 @@
-from app.models.alert import AlertModel  # Asegura el registro en Base.metadata
 from app.repositories.alert_repository import AlertRepository
 from app.services.anomaly_detector import (
     AlertNotificationStrategy,
     AnomalyDetector,
     DatabaseAlertStrategy,
 )
-
 
 # =====================================================================
 # 1. PRUEBAS UNITARIAS EN AISLAMIENTO (Sin Base de Datos)
@@ -48,9 +46,10 @@ def test_anomaly_triggers_notification_when_exceeding_threshold():
 # =====================================================================
 
 def test_database_alert_strategy_persists_alert_in_db():
-    """Prueba de integración: Verifica que DatabaseAlertStrategy guarde la alerta en SQLite."""
+    """Verifica que DatabaseAlertStrategy guarde la alerta en SQLite."""
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker
+
     from app.db import Base
     
     # 1. Creamos base de datos en memoria para garantizar aislamiento total
@@ -79,9 +78,10 @@ def test_database_alert_strategy_persists_alert_in_db():
 
 
 def test_database_alert_strategy_no_alert_below_threshold():
-    """Prueba de integración: Verifica que DatabaseAlertStrategy NO guarde nada si no supera el umbral."""
+    """Verifica que no se guarde una alerta por debajo del umbral."""
     from sqlalchemy import create_engine
     from sqlalchemy.orm import sessionmaker
+
     from app.db import Base
     
     # 1. Creamos la base de datos de pruebas limpia

@@ -1,15 +1,16 @@
-from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+
 from app.db import get_db
 from app.repositories.alert_repository import AlertRepository
 from app.schemas.alert import AlertOut, AlertUpdate
 
 router = APIRouter(prefix="/alerts", tags=["alerts"])
 
-@router.get("/", response_model=List[AlertOut])
+@router.get("/", response_model=list[AlertOut])
 def listar_alertas(
-    status: Optional[str] = None,
+    status: str | None = None,
     limit: int = 50,
     offset: int = 0,
     db: Session = Depends(get_db)

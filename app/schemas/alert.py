@@ -1,5 +1,7 @@
 from datetime import datetime
+
 from pydantic import BaseModel, Field
+
 
 class AlertBase(BaseModel):
     sensor_id: str
