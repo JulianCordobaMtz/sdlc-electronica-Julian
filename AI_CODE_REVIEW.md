@@ -78,7 +78,7 @@ python -m pytest tests/test_sensor_service.py -q
 ```
 
 Obtuvimos un resultado impecable en verde:
-`17 passed`
+`5 passed`
 
 Esto confirma que las 5 pruebas de auditoría pasaron exitosamente del estado RED al estado GREEN, blindando el servicio de gestión de sensores contra fallas lógicas y corrupción de telemetría en base de datos.
 

@@ -1,4 +1,7 @@
+from unittest.mock import Mock
+
 from app.schemas.reading import SensorReadingIn
+from app.services.anomaly_detector import AnomalyDetector
 from app.services.reading_service import ReadingService
 
 
@@ -16,7 +19,8 @@ class FakeReadingRepository:
 
 def test_registrar_lectura_con_fake_repo():
     fake_repo = FakeReadingRepository()
-    servicio = ReadingService(repo=fake_repo)
+    detector = Mock(spec=AnomalyDetector)
+    servicio = ReadingService(repo=fake_repo, detector=detector)
     
     lectura_in = SensorReadingIn(value=25.5, unit="C")
     

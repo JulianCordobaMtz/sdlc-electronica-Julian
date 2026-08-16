@@ -1,6 +1,8 @@
 # app/services/anomaly_detector.py
 from abc import ABC, abstractmethod
 
+from app.repositories.alert_repository import AlertRepository
+
 
 # =====================================================================
 # INTERFAZ / ABSTRACCIÓN DE LA ESTRATEGIA (Principio DIP / ISP)
@@ -65,7 +67,7 @@ class AnomalyDetector:
 
 class DatabaseAlertStrategy(AlertNotificationStrategy):
     """Estrategia concreta que persiste las alertas directamente en la base de datos."""
-    def __init__(self, alert_repo) -> None:
+    def __init__(self, alert_repo: AlertRepository) -> None:
         self.alert_repo = alert_repo
 
     def notify(self, sensor_id: str, value: float, threshold: float) -> None:
