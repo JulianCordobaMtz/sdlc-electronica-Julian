@@ -1,32 +1,15 @@
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy.orm import Session
 
-from app.db import get_db
-from app.repositories.reading_repo import ReadingRepository
+from app.dependencies import get_reading_service
 from app.schemas.reading import SensorReadingIn, SensorReadingOut, SensorReadingUpdate
 from app.services.reading_service import ReadingService
 
 router = APIRouter()
 
 
-def get_reading_service(db: Session = Depends(get_db)) -> ReadingService:
-    """Inyecta una instancia fresca de ReadingService con su repositorio
-    y el detector de anomalías configurado para persistir alertas en base de datos.
-    """
-    from app.repositories.alert_repository import AlertRepository
-    from app.services.anomaly_detector import AnomalyDetector, DatabaseAlertStrategy
-
-    repo = ReadingRepository(db)
-    alert_repo = AlertRepository(db)
-    strategy = DatabaseAlertStrategy(alert_repo)
-    detector = AnomalyDetector(strategy)
-
-    return ReadingService(repo, detector=detector)
-
-
-# 1. CREATE
+# 1. CREATE (Registro de Lectura)
 @router.post(
     "/sensors/{sensor_id}/readings",
     response_model=SensorReadingOut,
@@ -37,14 +20,14 @@ def create_reading(
     reading: SensorReadingIn,
     service: ReadingService = Depends(get_reading_service),
 ):
-    """Registrar una lectura para un sensor."""
+    """Registrar una lectura para un sensor y evaluar automáticamente anomalías."""
     try:
         return service.registrar_lectura(sensor_id, reading)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
 
-# 2. READ (Lista con paginación y filtros)
+# 2. READ (Lista con paginación y filtros por rango de fechas)
 @router.get("/sensors/{sensor_id}/readings", response_model=list[SensorReadingOut])
 def list_readings(
     sensor_id: str,
@@ -61,7 +44,7 @@ def list_readings(
         raise HTTPException(status_code=400, detail=str(e)) from e
 
 
-# 3. READ (Individual)
+# 3. READ (Lectura individual por ID)
 @router.get("/readings/{reading_id}", response_model=SensorReadingOut)
 def get_reading(
     reading_id: int,
@@ -74,7 +57,7 @@ def get_reading(
         raise HTTPException(status_code=404, detail=str(e)) from e
 
 
-# 4. UPDATE
+# 4. UPDATE (Actualización parcial de lectura)
 @router.patch("/readings/{reading_id}", response_model=SensorReadingOut)
 def update_reading(
     reading_id: int,
@@ -88,7 +71,7 @@ def update_reading(
         raise HTTPException(status_code=404, detail=str(e)) from e
 
 
-# 5. DELETE
+# 5. DELETE (Soft delete de lectura)
 @router.delete("/readings/{reading_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_reading(
     reading_id: int,
