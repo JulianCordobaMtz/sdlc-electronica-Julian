@@ -893,4 +893,567 @@ Uní los dos bloques de `steps` en uno solo (checkout, instalación de Python, d
 #### Justificación
  
 No era que el código estuviera mal, sino que un detalle de formato en el archivo YAML impedía que todo el flujo se ejecutara completo, y tener contraseñas visibles en el historial de Git sigue siendo un riesgo aunque ya no estén en el código actual — por eso había que limpiarlas, no solo quitarlas del archivo. Con esto quedaron cubiertos los criterios de Pipeline de CI y Despliegue continuo de la rúbrica de esta semana.
+
+
+
+## Semana 5
+
+### Entrada 1 — Un primer intento fallido con Aider
+
+#### Objetivo
+
+Empezar el día usando Aider para avanzar en la lógica de negocio del proyecto.
+
+#### Herramienta utilizada
+
+`Aider`
+
+#### Prompt utilizado
+
+> Intenté configurar Aider en la terminal para empezar a trabajar con él desde ese lunes.
+
+#### Propuesta de la IA
+
+Aider no llegó a responder nada, porque la instalación falló por problemas de dependencias en mi entorno de Python.
+
+#### Decisión y cambios realizados
+
+En vez de perder más tiempo tratando de arreglarlo en ese momento, decidí dejarlo pendiente y abrir mi editor con GitHub Copilot para no perder el día.
+
+#### Justificación
+
+Insistir con una herramienta que no arranca puede consumir horas que se pueden usar en avanzar con otra cosa; preferí empezar a producir algo y regresar a Aider más tarde con la cabeza más fresca.
+
+---
+
+### Entrada 2 — Primer trabajo del día con Copilot: conversiones de unidades
+
+#### Objetivo
+
+Aprovechar que ya tenía a Copilot funcionando para avanzar en algo, aunque no fuera lo más importante del proyecto.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Escribe las funciones para estandarizar las lecturas de los sensores (conversiones de Celsius a Fahrenheit, etc.) y genérame los casos de prueba básicos en test_conversions.py.
+
+#### Propuesta de la IA
+
+Copilot generó las funciones de conversión y un archivo de pruebas básico para ellas.
+
+#### Decisión y cambios realizados
+
+Acepté ese código como un pequeño avance del día, aunque sabía que no era la parte central del proyecto.
+
+#### Justificación
+
+Mientras resolvía el problema con Aider, prefería tener algo de avance real en el repositorio en lugar de quedarme sin hacer nada.
+
+---
+
+### Entrada 3 — Documentación adelantada basada solo en las conversiones
+
+#### Objetivo
+
+Aprovechar ese pequeño avance para empezar a redactar la documentación que pedía la rúbrica (AI Code Review y ADR).
+
+#### Herramienta utilizada
+
+`Chat GPT`
+
+#### Prompt utilizado
+
+> Le pedí al asistente que me generara un borrador de AI Code Review y un ADR, basándonos únicamente en las funciones de conversión que ya tenía.
+
+#### Propuesta de la IA
+
+Me redactó ambos documentos, pero centrados solo en ese código de conversiones.
+
+#### Decisión y cambios realizados
+
+En un inicio los guardé como primer borrador, pensando que ya tenía adelantado algo de la documentación de la semana.
+
+#### Justificación
+
+Quería ir avanzando en varios frentes a la vez, aunque en ese momento no me di cuenta de que estaba documentando algo que no era el núcleo real del proyecto.
+
+---
+
+### Entrada 4 — Corrección de rumbo: comparar con la referencia de mi compañero
+
+#### Objetivo
+
+Revisar si esos primeros borradores de ADR y Code Review realmente cumplían con lo que pedía la rúbrica.
+
+#### Herramienta utilizada
+
+`Chat GPT`
+
+#### Prompt utilizado
+
+> Le pasé al asistente el archivo de AI Code Review de mi compañero y le pedí que lo usáramos como referencia para entender qué tan a fondo debía ir mi propia documentación (hallazgos, evaluación, decisión y TDD).
+
+#### Propuesta de la IA
+
+Al comparar, quedó claro que mis documentos eran muy pobres porque las conversiones de unidades no eran la parte central de la arquitectura del proyecto.
+
+#### Decisión y cambios realizados
+
+Descarté por completo el ADR y el Code Review que había hecho esa mañana, y decidí enfocarme en lo que realmente pedía la semana: el SensorService y la persistencia real de los datos.
+
+#### Justificación
+
+Documentar algo superficial solo por "tener algo" no cumplía con lo que pedía la rúbrica; era mejor frenar a tiempo que entregar documentación que no reflejara el trabajo real del proyecto.
+
+---
+
+### Entrada 5 — Logrando instalar Aider correctamente
+
+#### Objetivo
+
+Resolver el problema de instalación de Aider del inicio del día para poder usarlo en el resto de la semana.
+
+#### Herramienta utilizada
+
+`Chat GPT`
+
+#### Prompt utilizado
+
+> Le pedí ayuda para entender por qué había fallado la instalación de Aider y si había otra forma de instalarlo sin que chocara con las demás dependencias de mi proyecto.
+
+#### Propuesta de la IA
+
+Me explicó una forma distinta de instalarlo, usando un entorno virtual exclusivo solo para Aider, separado del entorno de mi proyecto.
+
+#### Decisión y cambios realizados
+
+Seguí esa recomendación y esta vez la instalación sí funcionó.
+
+#### Justificación
+
+Aislar Aider en su propio entorno evitó que sus dependencias chocaran con las de FastAPI, SQLAlchemy y el resto de librerías que ya tenía instaladas para el proyecto.
+
+---
+
+### Entrada 6 — Primer prompt formal a Aider: modelo de base de datos para conversiones
+
+#### Objetivo
+
+Ya con Aider funcionando y con el enfoque correcto (backend real), empezar a usarlo para crear el modelo de base de datos.
+
+#### Herramienta utilizada
+
+`Aider`
+
+#### Prompt utilizado
+
+> Aider, necesito crear el modelo de base de datos para manejar las conversiones de los sensores utilizando SQLAlchemy 2.0. Crea la tabla correspondiente asegurándote de usar Mapped y definir correctamente las relaciones con la tabla de sensores.
+
+#### Propuesta de la IA
+
+Aider generó el modelo con la sintaxis tipada de SQLAlchemy 2.0 y la relación hacia la tabla de sensores.
+
+#### Decisión y cambios realizados
+
+Acepté el modelo generado como punto de partida para seguir construyendo el resto de los servicios al día siguiente.
+
+#### Justificación
+
+Era el primer resultado real de Aider en el proyecto, y confirmar que respetaba la sintaxis moderna de SQLAlchemy (Mapped) me dio confianza para seguir delegándole tareas más grandes.
+
+---
+
+### Entrada 7 — Entendiendo el patrón Strategy antes de escribir código
+
+#### Objetivo
+
+Comprender bien el patrón Strategy antes de empezar a programar el AnomalyDetector, para aplicar correctamente el principio Abierto/Cerrado de SOLID.
+
+#### Herramienta utilizada
+
+`Chat GPT`
+
+#### Prompt utilizado
+
+> Le pedí al asistente que me explicara cómo funciona el patrón Strategy, y diseñamos juntos la clase abstracta AlertNotificationStrategy y dos clases concretas: SpyAlertStrategy y DatabaseAlertStrategy.
+
+#### Propuesta de la IA
+
+Me explicó el patrón con ejemplos y propuso la estructura de la clase abstracta y las dos implementaciones concretas.
+
+#### Decisión y cambios realizados
+
+Acepté ese diseño como base antes de escribir cualquier código.
+
+#### Justificación
+
+Entender el patrón antes de programarlo evita terminar con una clase abstracta mal pensada que haya que rehacer después; diseñar primero en papel es más barato que corregir código ya escrito.
+
+---
+
+### Entrada 8 — Redactando los 5 tests unitarios de anomalías
+
+#### Objetivo
+
+Tener listos los tests de detección de anomalías antes de pedirle a Aider que implementara el código.
+
+#### Herramienta utilizada
+
+`Chat GPT`
+
+#### Prompt utilizado
+
+> Le pedí al asistente que redactara los 5 tests unitarios para verificar la detección de anomalías, y discutimos cómo el SpyAlertStrategy iba a guardar las alertas en memoria.
+
+#### Propuesta de la IA
+
+Propuso los 5 tests, y sobre cómo validar las alertas guardadas, sugirió acceder al índice `alerts[0]` de la lista donde el Spy las almacena.
+
+#### Decisión y cambios realizados
+
+Acepté esa forma de validación y dejé los 5 tests listos, en fase RED, antes de pedir la implementación.
+
+#### Justificación
+
+Escribir los tests primero (aunque fallaran porque el código todavía no existía) aseguraba que la implementación que hiciera Aider después tuviera que ajustarse a un comportamiento ya definido, y no al revés.
+
+---
+
+### Entrada 9 — Delegando la implementación del patrón Strategy a Aider
+
+#### Objetivo
+
+Escribir el código de `AlertNotificationStrategy`, `SpyAlertStrategy` y `DatabaseAlertStrategy` ya con el diseño y los tests listos.
+
+#### Herramienta utilizada
+
+`Aider`
+
+#### Prompt utilizado
+
+> Aider, actúa como un Arquitecto de Software en Python. Implementa el patrón Strategy que definimos. Crea la clase abstracta AlertNotificationStrategy con el método send_alert. Implementa SpyAlertStrategy y DatabaseAlertStrategy. Asegúrate de añadir type hints estrictos para Mypy.
+
+#### Propuesta de la IA
+
+Aider generó las 3 clases respetando la estructura que ya habíamos diseñado, con los tipos anotados.
+
+#### Decisión y cambios realizados
+
+Corrí los 5 tests que ya tenía listos y confirmé que pasaran con esta implementación antes de aceptarla como definitiva.
+
+#### Justificación
+
+Como los tests ya estaban escritos desde antes, confirmar que pasaran era la forma más directa de saber si Aider había respetado el diseño acordado o se había desviado de él.
+
+---
+
+### Entrada 10 — Refactorizando ReadingService para respetar DIP
+
+#### Objetivo
+
+Corregir un problema que detecté en `ReadingService`, que estaba creando sus propias dependencias en vez de recibirlas desde fuera.
+
+#### Herramienta utilizada
+
+`GitHub Copilot`
+
+#### Prompt utilizado
+
+> Le pedí ayuda a Copilot para refactorizar ReadingService, explicándole que estaba instanciando internamente sus dependencias (como el repositorio), lo cual rompía el principio de Inversión de Dependencias que ya habíamos aplicado en el resto del proyecto.
+
+#### Propuesta de la IA
+
+Me propuso mover esas dependencias al constructor de la clase, para que se le inyectaran desde afuera en vez de crearlas dentro.
+
+#### Decisión y cambios realizados
+
+Acepté el cambio y actualicé también los lugares donde se creaba `ReadingService`, para pasarle ahora sus dependencias.
+
+#### Justificación
+
+Si el servicio crea sus propias dependencias, no puedo reemplazarlas por versiones falsas en los tests; inyectarlas desde afuera es lo que permite probar el servicio sin depender de una base de datos real.
+
+---
+
+### Entrada 11 — Descubriendo que mis pruebas compartían estado entre sí
+
+#### Objetivo
+
+Entender por qué mis pruebas fallaban al correr solo el archivo `test_anomalies.py`, aunque pasaban si corría toda la suite completa.
+
+#### Herramienta utilizada
+
+`Chat GPT`
+
+#### Prompt utilizado
+
+> Le describí el síntoma al asistente: mis pruebas fallaban al ejecutarse solas pero pasaban si se ejecutaban junto con el resto, y le pregunté por qué podía estar pasando eso con una base de datos SQLite en memoria.
+
+#### Propuesta de la IA
+
+Me explicó que probablemente estaba reutilizando la misma base de datos en memoria entre varias pruebas, y que cada test debería tener su propia base de datos aislada para no depender del orden en que se ejecutaran.
+
+#### Decisión y cambios realizados
+
+Identifiqué que tenía que revisar cómo estaba creando la sesión de base de datos en mis pruebas, para que cada test arrancara con una base limpia en vez de compartir una sola instancia.
+
+#### Justificación
+
+Unas pruebas que solo pasan en cierto orden no son pruebas confiables; si algún día cambio el orden en que corren, podrían empezar a fallar sin que el código realmente esté roto.
+
+---
+
+### Entrada 12 — Agregando paginación al repositorio de lecturas
+
+#### Objetivo
+
+Que la API pudiera devolver las lecturas de un sensor por partes, en vez de todas de golpe.
+
+#### Herramienta utilizada
+
+`Aider`
+
+#### Prompt utilizado
+
+> Aider, modifica el método de consulta en el repositorio de lecturas. Añade soporte para paginación recibiendo limit y offset como enteros. Debe devolver una lista tipada de modelos Reading.
+
+#### Propuesta de la IA
+
+Aider modificó el método del repositorio para aceptar `limit` y `offset`, y devolvió una lista tipada de `Reading`.
+
+#### Decisión y cambios realizados
+
+Acepté el cambio y lo agregué a mi archivo `prompting.md` como uno de los ejemplos de prompt bueno que pedía la rúbrica de esta semana.
+
+#### Justificación
+
+La paginación evita que la API tenga que devolver miles de lecturas de golpe si un sensor lleva mucho tiempo activo, y era justo el tipo de tarea pequeña y concreta que la rúbrica pedía documentar con un prompt bien estructurado.
+
+---
+
+### Entrada 13 — Creando el esquema de salida ReadingResponse con Pydantic
+
+#### Objetivo
+
+Definir cómo se debía ver la respuesta de la API al consultar una lectura, separándola del modelo de base de datos.
+
+#### Herramienta utilizada
+
+`Aider`
+
+#### Prompt utilizado
+
+> Aider, genera un esquema Pydantic de salida llamado ReadingResponse. Debe incluir validación estricta y habilitar from_attributes=True para serializar objetos de SQLAlchemy.
+
+#### Propuesta de la IA
+
+Aider generó el esquema `ReadingResponse` con la configuración `from_attributes=True`, para poder construirlo directamente a partir de un objeto `Reading` de SQLAlchemy.
+
+#### Decisión y cambios realizados
+
+Acepté el esquema y lo usé como el `response_model` de los endpoints de lectura.
+
+#### Justificación
+
+Separar lo que devuelve la API de lo que vive en la base de datos evita exponer campos internos por accidente, y `from_attributes=True` me ahorraba tener que convertir manualmente cada objeto antes de regresarlo.
+
+---
+
+### Entrada 14 — Un dato inventado por Aider en un test HTTP
+
+#### Objetivo
+
+Escribir una prueba de integración que confirmara que la API responde con error 422 cuando se manda una temperatura inválida.
+
+#### Herramienta utilizada
+
+`Aider`
+
+#### Prompt utilizado
+
+> Escribe una prueba con pytest que envíe un POST HTTP al router de lecturas con una temperatura inválida y valide que retorna un error 422.
+
+#### Propuesta de la IA
+
+Aider generó la prueba, pero asumió que existía una variable llamada `client` disponible de forma global, cuando en realidad esa variable no existía así en mi proyecto; al correr la prueba, esto provocaba un `NameError`.
+
+#### Decisión y cambios realizados
+
+Rechacé esa primera versión y le di un prompt más específico: "Aider, corrige el código inyectando client como fixture de pytest en la firma de la función."
+
+#### Justificación
+
+Aceptar el código tal cual habría dejado una prueba que ni siquiera podía ejecutarse; Aider había asumido algo sobre la estructura de mi proyecto que no era cierto, y corregirlo evitó dejar ese error en el pipeline.
+
+---
+
+### Entrada 15 — Redactando el ADR-0001 de verdad
+
+#### Objetivo
+
+Documentar formalmente la arquitectura del proyecto, ahora que el SensorService ya estaba implementado con las dependencias bien inyectadas.
+
+#### Herramienta utilizada
+
+`Chat GPT`
+
+#### Prompt utilizado
+
+> Le pedí al asistente que me ayudara a redactar el ADR-0001 sobre la separación por capas, explicando cómo se comunican routers, services, repositories y models, y por qué usamos Protocol para lograr la Inversión de Dependencias.
+
+#### Propuesta de la IA
+
+Me propuso la estructura del ADR (contexto, decisión, consecuencias) y una redacción explicando por qué separar la lógica de negocio de SQLAlchemy mediante `Protocol` hace que el proyecto sea más fácil de probar y de cambiar en el futuro.
+
+#### Decisión y cambios realizados
+
+Acepté la estructura y ajusté la redacción con ejemplos específicos de mi propio proyecto, en lugar del borrador genérico del lunes.
+
+#### Justificación
+
+Este ADR sí reflejaba una decisión de arquitectura real que ya estaba implementada y podía defender con código, a diferencia del intento del lunes que documentaba algo que no era el núcleo del proyecto.
+
+---
+
+### Entrada 16 — El Code Review real: 9 hallazgos y un rechazo justificado
+
+#### Objetivo
+
+Someter mi archivo `reading_service.py`, ya terminado, a una revisión de código hecha por la IA.
+
+#### Herramienta utilizada
+
+`Chat GPT`
+
+#### Prompt utilizado
+
+> Le pedí al asistente que revisara mi archivo app/services/reading_service.py como si fuera un ingeniero senior en un code review, buscando violaciones de SOLID, casos borde sin manejar, riesgos de seguridad y problemas de rendimiento.
+
+#### Propuesta de la IA
+
+Me devolvió 9 hallazgos distintos, cada uno con una línea señalada y una corrección sugerida. Uno de ellos (CR-03) pedía implementar transacciones atómicas complejas para ciertas operaciones.
+
+#### Decisión y cambios realizados
+
+Rechacé específicamente el hallazgo CR-03.
+
+#### Justificación
+
+Consideré que agregar transacciones atómicas complejas era un sobrediseño para el alcance actual del proyecto; hubiera agregado complejidad sin un beneficio real en esta etapa, así que decidí no implementarlo y dejarlo documentado como un rechazo justificado.
+
+---
+
+### Entrada 17 — Corrigiendo los bugs críticos del Code Review con TDD
+
+#### Objetivo
+
+Corregir los hallazgos del Code Review que sí representaban riesgos reales: valores numéricos inválidos, fechas sin zona horaria, y pérdida de datos en el PATCH.
+
+#### Herramienta utilizada
+
+`Aider`
+
+#### Prompt utilizado
+
+> Aider, basándote en los hallazgos del Code Review, corrige ReadingUpdate. Usa exclude_unset para distinguir entre null y campos omitidos en el PATCH. Luego, en reading_service.py, añade protección explícita contra valores math.isnan y math.isinf en la temperatura. Asegúrate de que todas las fechas utilicen timezone.utc.
+
+#### Propuesta de la IA
+
+Aider modificó `ReadingUpdate` para diferenciar entre un campo que se manda como nulo a propósito y uno que simplemente no se envía, agregó las validaciones contra NaN e infinito, y unificó el uso de fechas con zona horaria UTC en todo el servicio.
+
+#### Decisión y cambios realizados
+
+Antes del cambio, corrí los tests y confirmé que fallaban por estos 3 problemas (fase ROJO); después de que Aider aplicó las correcciones, los volví a correr y pasaron todos (fase VERDE).
+
+#### Justificación
+
+Los 3 hallazgos aceptados eran errores reales que podían corromper datos en producción (un PATCH que borra información sin querer, temperaturas imposibles guardadas como válidas, y fechas mezcladas sin zona horaria); confirmar el fallo antes de la corrección era la única forma de estar seguro de que el arreglo realmente resolvía el problema.
+
+---
+
+### Entrada 18 — Cierre de semana: limpieza de la documentación y validación estricta
+
+#### Objetivo
+
+Dejar la documentación de IA lista para entrega y confirmar que todo el proyecto cumpliera con los estándares de calidad exigidos.
+
+#### Herramienta utilizada
+
+`Chat GPT`
+
+#### Prompt utilizado
+
+> Le pedí ayuda para revisar mi archivo AI_CODE_REVIEW.md y quitar cualquier parte que sonara a que la IA había inventado un hallazgo, dejando claro por escrito qué evaluación humana hubo detrás de cada cambio aceptado o rechazado.
+
+#### Propuesta de la IA
+
+Me ayudó a limpiar la redacción del documento, dejando explícita la decisión tomada en cada hallazgo (aceptado, corregido o rechazado) y el porqué.
+
+#### Decisión y cambios realizados
+
+Además de limpiar el documento, corrí yo mismo los comandos de validación final: `ruff check`, `mypy` y `pytest`.
+
+#### Justificación
+
+`ruff check` no marcó ningún problema, `mypy` no encontró errores de tipos, y `pytest` corrió 69 pruebas con una cobertura del 90.71%, superando el 80% que exigía la rúbrica; confirmar esto con los comandos reales, y no solo confiar en lo que decía la IA, era la única forma de estar seguro de que el proyecto realmente cumplía antes de entregarlo.
+
+
+### Entrada 19 — Auditoría completa del proyecto con la checklist de 10 puntos
  
+#### Objetivo
+ 
+Someter todo el proyecto SensorHub (routers, services, repositories, models, schemas, tests y archivos de configuración) a una auditoría técnica estricta, usando la misma checklist de 10 puntos del peer review, antes de dar por cerrado el trabajo de la semana.
+ 
+#### Herramienta utilizada
+ 
+`GitHub Copilot`
+ 
+#### Prompt utilizado
+ 
+> Actúa como un Ingeniero de Software Principal y Evaluador Técnico de Código muy estricto. Necesito que realices una auditoría completa del código de este espacio de trabajo (proyecto SensorHub) utilizando la "Checklist de revisión por pares de 10 puntos". Por favor, analiza todos los archivos del repositorio (routers, services, repositories, models, schemas, tests y archivos de configuración) y genera un reporte detallado evaluando punto por punto los siguientes criterios:
+>
+> ### LOS 10 PUNTOS DE REVISIÓN A EVALUAR:
+> 1. ¿El PR se entiende y se puede probar sin preguntar?: Revisa si hay instrucciones claras, comandos de ejecución de servidor y payload JSON de prueba.
+> 2. La estructura oficial del repositorio se respeta: Revisa que el código esté en 'app/' con 'routers/', 'services/', 'repositories/', 'models/', 'schemas/', 'db.py' y que cada carpeta contenga su '__init__.py'. Las carpetas semanales no deben importarse desde 'app/'.
+> 3. Cada capa hace solo lo suyo: Revisa que el router solo atienda HTTP y delegue al servicio; que el servicio contenga la lógica de negocio y que el repositorio sea el único que acceda a SQLAlchemy (los routers o servicios no deben importar o instanciar SQLAlchemy directamente).
+> 4. Verbos, rutas y códigos de estado REST: GET /sensors/{id}/readings -> 200, POST /sensors/{id}/readings -> 201, GET /readings/{id} -> 200, PATCH /readings/{id} -> 200, DELETE /readings/{id} -> 204. Cualquier código de estado incorrecto o ruta mal diseñada debe ser señalada.
+> 5. Paginación y filtros en lecturas: Revisa que 'GET /sensors/{id}/readings' use 'limit' y 'offset' en la base de datos (no en Python) y filtre por rango de fechas '?from=...&to=...'.
+> 6. Pydantic valida entrada y salida con física real: Revisa que los schemas de entrada y salida estén separados (response_model declarado en routers) y que rechace unidades inválidas o valores imposibles en temperatura/humedad.
+> 7. Uso de HTTPException y códigos correctos: Los errores del servicio deben traducirse a excepciones HTTP controladas (400, 404, 409, 422) sin fugar trazas SQL ni provocar errores 500.
+> 8. Persistencia con SQLAlchemy 2.x: Los modelos deben usar la API tipada 'Mapped[...]' con 'mapped_column(...)'. Revisa que no use código de la versión 1.x (Column, session.query) ni tenga bases de datos (.db) versionadas en git.
+> 9. DIP y cierre de sesiones: Revisa que el servicio dependa de un 'Protocol' (Abstracción) y que en 'dependencies.py' (o donde use la sesión) se use 'yield' con 'finally: session.close()' para liberar conexiones de red.
+> 10. Suite de pruebas, linters y git: Ejecuta mentalmente o inspecciona los tests. La cobertura debe estimarse en >=80%, sin base de datos real compartida entre tests y sin archivos temporales '__pycache__' versionados.
+>
+> ### REQUERIMIENTO ESPECIAL DE INTEGRACIÓN DE LA SEMANA 5:
+> Adicionalmente, audita si implementó correctamente el patrón Strategy (AlertNotificationStrategy con DatabaseAlertStrategy y SpyAlertStrategy) para las anomalías, si desacopló el servicio de alertas y si sus aserciones en las pruebas usan accesos seguros por índice (ej. 'alerts[0]') para evitar fallas relacionales.
+>
+> ### FORMATO EXIGIDO PARA TU REPORTE:
+> Para cada punto donde encuentres un fallo, una mala práctica o una oportunidad de mejora, indícame: ubicación (nombre del archivo y número de línea aproximado), qué observaste (qué está fallando o rompiendo la arquitectura) y qué propones exactamente en código para solucionarlo. Sé sumamente técnico, estricto y analítico.
+ 
+#### Propuesta de la IA
+ 
+Copilot revisó todo el repositorio punto por punto siguiendo la checklist, y regresó un reporte técnico señalando, para cada hallazgo, el archivo y la línea aproximada, qué estaba fallando y qué proponía en código para corregirlo. Entre los hallazgos más importantes señaló que el constructor de `ReadingService` tenía un valor por defecto que rompía la Inversión de Dependencias, que la suite de pruebas de anomalías no era confiable al correrse de forma aislada, y sugirió agregar un patrón transaccional complejo (Unit of Work) para las alertas.
+ 
+#### Decisión y cambios realizados
+ 
+Usé este reporte como punto de partida para revisar el proyecto a fondo: acepté investigar y corregir el problema del constructor de `ReadingService` y el de las pruebas aisladas, pero rechacé la sugerencia de agregar un patrón Unit of Work, por considerarlo sobrediseño para el alcance actual del proyecto.
+ 
+#### Justificación
+ 
+Pedirle a la IA una auditoría completa con una checklist estricta y un formato exigido (ubicación, qué observó, qué propone) me dio hallazgos mucho más específicos que una revisión superficial, y me permitió decidir con criterio cuáles corregir de inmediato y cuáles rechazar, en vez de aceptar todo el reporte de golpe.
+
+ # Conclusiones de la Ronda 2 de Peer Review: Análisis Comparativo (Humano vs. IA)
+
+## Conclusión 1: El ojo humano como guardián de las reglas de negocio y los contratos nominales
+El criterio humano demostró ser insustituible para evaluar el cumplimiento de las directrices nominales del curso y la coherencia del diseño arquitectónico. Mientras que la IA validó el código de alertas como "funcional", el análisis humano detectó de inmediato desviaciones críticas frente a la rúbrica de la Semana 5, tales como el uso de `AlertStrategy` en lugar de `AlertNotificationStrategy`, la total ausencia de la clase `SpyAlertStrategy` (reemplazada erróneamente por mocks automáticos de librería) y el uso del método `send_alert` en lugar de `notify`. Asimismo, el análisis humano identificó problemas de acoplamiento de responsabilidades que la IA pasó por alto, como el hecho de que `DatabaseAlertStrategy` mezclara la persistencia en base de datos con salidas físicas por consola mediante `print`.
+
+## Conclusión 2: La IA como herramienta táctica para la detección de casos borde y validación de tipos
+La IA demostró una excelente capacidad analítica para realizar auditorías estáticas profundas y encontrar vulnerabilidades de datos y fallos en casos límite. El análisis asistido identificó de forma inmediata un error físico crítico en la capa de transporte: los esquemas de Pydantic permitían el ingreso de valores flotantes no finitos (`NaN` e infinitos), lo que corrompería la telemetría del sistema al persistirse en la base de datos. De igual forma, la IA fue muy efectiva al señalar la debilidad de los tipos en los protocolos de persistencia (el uso de diccionarios planos sin tipar) y la falta de restricciones en los parámetros de paginación de la API, áreas donde el ojo humano tiende a confiarse.
+
+## Conclusión 3: El peligro de la "falsa seguridad" en la cobertura y la necesidad del enfoque híbrido
+Esta comparativa evidenció que una cobertura de código alta (superior al 90% en el proyecto evaluado) puede generar una falsa sensación de robustez si las pruebas están mal aisladas. El análisis humano detectó un fallo crítico de integración que la cobertura ocultaba: las pruebas consumían un archivo de base de datos físico y compartido (`sensorhub.db`) en lugar de levantar instancias independientes en memoria (`sqlite:///:memory:`) para cada test, lo que provocaba contaminación de datos y dependencias en el orden de ejecución. 
+
+El enfoque híbrido demuestra que la IA es un copiloto extraordinario para asegurar la calidad del código a nivel de sintaxis, tipos y casos borde matemáticos, pero el ingeniero humano sigue siendo el único capaz de guiar la arquitectura, asegurar el cumplimiento de las especificaciones del cliente y evitar el sobrediseño.
