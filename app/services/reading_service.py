@@ -1,14 +1,25 @@
-from app.schemas.reading import SensorReadingIn, SensorReadingUpdate
+from typing import Any, Protocol
 
-# Importamos el detector y la estrategia de consola por defecto
-from app.services.anomaly_detector import AnomalyDetector, ConsoleAlertStrategy
+from app.schemas.reading import SensorReadingIn, SensorReadingUpdate
+from app.services.anomaly_detector import AnomalyDetector
+
+
+class SensorLookupRepository(Protocol):
+    def create(self, sensor_id: str, data: dict[str, Any]) -> Any: ...
+    def get_by_id(self, reading_id: int) -> Any: ...
+    def get_by_sensor(
+        self, sensor_id: str, limit: int, offset: int, from_date: Any, to_date: Any
+    ) -> Any: ...
+    def update(self, db_reading: Any, data: dict[str, Any]) -> Any: ...
+    def delete(self, db_reading: Any) -> None: ...
 
 
 class ReadingService:
-    def __init__(self, repo, detector: AnomalyDetector | None = None):
+    def __init__(
+        self, repo: SensorLookupRepository, detector: AnomalyDetector
+    ) -> None:
         self.repo = repo
-        # Si no se pasa un detector, creamos uno por defecto con alertas a consola
-        self.detector = detector or AnomalyDetector(ConsoleAlertStrategy())
+        self.detector = detector
 
     def registrar_lectura(
         self, sensor_id: str, reading_in: SensorReadingIn

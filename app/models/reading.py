@@ -6,7 +6,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
 
-# Le decimos a Mypy y a VS Code dónde vive realmente "SensorModel"
 if TYPE_CHECKING:
     from app.models.sensor import SensorModel
 
