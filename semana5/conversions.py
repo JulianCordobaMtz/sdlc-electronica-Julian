@@ -13,6 +13,7 @@ ABSOLUTE_ZERO_F_IN_F: Final[float] = -459.67
 ABSOLUTE_ZERO_K_IN_K: Final[float] = 0.0
 
 
+
 def celsius_to_fahrenheit(c: float) -> float:
 	"""Convierte Celsius a Fahrenheit.
 
