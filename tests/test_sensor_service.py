@@ -25,7 +25,7 @@ class FakeSensorRepository:
             location=sensor_in.location,
             type=sensor_in.type,
             alert_threshold=sensor_in.alert_threshold,
-            is_active=True
+            is_active=True,
         )
         self.sensors[sensor_in.sensor_id] = sensor
         return sensor
@@ -56,7 +56,7 @@ def test_create_sensor_invalid_id_rejected(sensor_service: SensorService):
         name="Sensor de prueba",  # Agregado
         location="Bodega A",
         type="temperatura",
-        alert_threshold=30.0
+        alert_threshold=30.0,
     )
     with pytest.raises(
         ValueError,
@@ -70,7 +70,7 @@ def test_create_sensor_invalid_id_rejected(sensor_service: SensorService):
         name="Sensor de prueba",  # Agregado
         location="Bodega A",
         type="temperatura",
-        alert_threshold=30.0
+        alert_threshold=30.0,
     )
     with pytest.raises(
         ValueError,
@@ -87,7 +87,7 @@ def test_create_sensor_nan_threshold_rejected(sensor_service: SensorService):
         name="Sensor de prueba",  # Agregado
         location="Bodega A",
         type="temperatura",
-        alert_threshold=float("nan")
+        alert_threshold=float("nan"),
     )
     with pytest.raises(
         ValueError,
@@ -101,7 +101,7 @@ def test_create_sensor_nan_threshold_rejected(sensor_service: SensorService):
         name="Sensor de prueba",  # Agregado
         location="Bodega A",
         type="temperatura",
-        alert_threshold=float("inf")
+        alert_threshold=float("inf"),
     )
     with pytest.raises(
         ValueError,
@@ -118,7 +118,7 @@ def test_sensor_soft_delete_preserves_historical_data(sensor_service: SensorServ
         name="Sensor de prueba",  # Agregado
         location="Bodega B",
         type="temperatura",
-        alert_threshold=35.0
+        alert_threshold=35.0,
     )
     sensor_service.create_sensor(new_sensor)
 
@@ -139,7 +139,7 @@ def test_update_sensor_blocks_immutable_fields(sensor_service: SensorService):
         name="Sensor de prueba",  # Agregado
         location="Bodega C",
         type="temperatura",
-        alert_threshold=28.0
+        alert_threshold=28.0,
     )
     sensor_service.create_sensor(new_sensor)
 
@@ -147,11 +147,11 @@ def test_update_sensor_blocks_immutable_fields(sensor_service: SensorService):
     update_data = SensorUpdate(
         sensor_id="TEMP-VULNERABLE",  # Intento de cambiar la llave primaria
         location="Bodega C Modificada",
-        alert_threshold=29.0
+        alert_threshold=29.0,
     )
-    
+
     updated_sensor = sensor_service.update_sensor("TEMP-04", update_data)
-    
+
     # El ID original debe permanecer intacto y la ubicación debió cambiar
     assert updated_sensor.sensor_id == "TEMP-04"
     assert updated_sensor.location == "Bodega C Modificada"

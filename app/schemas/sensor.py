@@ -1,4 +1,3 @@
-
 from pydantic import BaseModel, Field
 
 
@@ -9,11 +8,13 @@ class SensorIn(BaseModel):
     location: str | None = None
     alert_threshold: float | None = None
 
+
 class SensorUpdate(BaseModel):
     name: str | None = None
     type: str | None = None
     location: str | None = None
     alert_threshold: float | None = None
+
 
 class SensorOut(SensorIn):
     is_active: bool

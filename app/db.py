@@ -12,7 +12,7 @@ if DATABASE_URL.startswith("postgres://"):
 elif DATABASE_URL.startswith("postgresql://") and "+psycopg" not in DATABASE_URL:
     DATABASE_URL = DATABASE_URL.replace("postgresql://", "postgresql+psycopg://", 1)
 
-# 3. Configuración especial para SQLite 
+# 3. Configuración especial para SQLite
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
 # 4. Creación del motor de base de datos
@@ -21,9 +21,11 @@ engine = create_engine(DATABASE_URL, connect_args=connect_args)
 # 5. Configuración de sesiones
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+
 # 6. Clase base para los modelos ORM
 class Base(DeclarativeBase):
     pass
+
 
 # 7. Dependencia para obtener la sesión de la base de datos (¡Restaurada!)
 def get_db():

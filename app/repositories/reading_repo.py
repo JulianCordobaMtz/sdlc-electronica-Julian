@@ -26,14 +26,13 @@ class ReadingRepository:
         self, sensor_id: str, limit: int, offset: int, from_date, to_date
     ):
         stmt = select(ReadingModel).where(
-            ReadingModel.sensor_id == sensor_id,
-            ReadingModel.is_active
+            ReadingModel.sensor_id == sensor_id, ReadingModel.is_active
         )
         if from_date:
             stmt = stmt.where(ReadingModel.timestamp >= from_date)
         if to_date:
             stmt = stmt.where(ReadingModel.timestamp <= to_date)
-            
+
         stmt = stmt.offset(offset).limit(limit)
         return self.db.scalars(stmt).all()
 
