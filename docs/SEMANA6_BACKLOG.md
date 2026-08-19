@@ -17,10 +17,10 @@ verde y desplegado.
 | RF-2 | Implementado | Valida tipo, unidad, rango físico y sensor activo | P0 |
 | RF-3 | Casi listo | Paginación y fechas existen; faltan casos borde de integración | P0 |
 | RF-4 | Implementado | Genera alertas WARNING/CRITICAL por umbral | P0 |
-| RF-5 | Parcial | Consulta y cambio de estado existen; falta validar transiciones | P0 |
+| RF-5 | Implementado | Flujo open/acknowledged/resolved validado en servicio | P0 |
 | RF-6 | Implementado | Estadísticas por sensor y periodo con pruebas | P0 |
 | RF-7 | Parcial | `/health` existe; faltan comprobación de BD y métricas | P0 |
-| RNF-1 | Parcial | Capas y DIP en sensores/lecturas; alertas aún usan repositorio en router | P0 |
+| RNF-1 | Implementado | Sensores, lecturas y alertas usan servicios con DIP | P0 |
 | RNF-2 | Cumple base | 87% y tests de integración; mantener umbral al agregar código | P0 |
 | RNF-3 | Parcial | CI con lint, mypy y tests; validar CD real y sus secretos | P0 |
 | RNF-4 | Parcial | Migración inicial lista; falta verificar Compose con PostgreSQL | P0 |
@@ -33,7 +33,7 @@ verde y desplegado.
 - [x] Implementar RF-6 con mínimo, máximo, promedio y cantidad por periodo.
 - [x] Completar validación física por tipo de sensor en dominio puro.
 - [x] Rechazar lecturas para sensores inexistentes o inactivos.
-- [ ] Validar estados y transiciones de alertas mediante un servicio.
+- [x] Validar estados y transiciones de alertas mediante un servicio.
 - [ ] Añadir pruebas de integración para RF-1 a RF-6 y conservar cobertura >= 80%.
 
 ## Mini-sprint 2 - Producción y evidencia

@@ -229,3 +229,59 @@ def test_estadisticas_sin_lecturas_devuelven_404():
     response = client.get("/sensors/SIN-LECTURAS/statistics")
 
     assert response.status_code == 404
+
+
+def _crear_alerta_de_prueba(sensor_id: str = "TEMP-ALERT") -> int:
+    client.post(
+        "/sensors",
+        json={
+            "sensor_id": sensor_id,
+            "name": "Sensor de alertas",
+            "type": "temperatura",
+            "alert_threshold": 30.0,
+        },
+    )
+    response = client.post(
+        f"/sensors/{sensor_id}/readings",
+        json={"value": 31.0, "unit": "C"},
+    )
+    assert response.status_code == 201
+
+    alerts = client.get("/alerts", params={"status": "open"})
+    assert alerts.status_code == 200
+    return alerts.json()[0]["id"]
+
+
+def test_alerta_sigue_flujo_open_acknowledged_resolved():
+    alert_id = _crear_alerta_de_prueba()
+
+    acknowledged = client.patch(f"/alerts/{alert_id}", json={"status": "acknowledged"})
+    resolved = client.patch(f"/alerts/{alert_id}", json={"status": "resolved"})
+
+    assert acknowledged.status_code == 200
+    assert acknowledged.json()["status"] == "acknowledged"
+    assert resolved.status_code == 200
+    assert resolved.json()["status"] == "resolved"
+
+
+def test_alerta_rechaza_salto_directo_a_resolved():
+    alert_id = _crear_alerta_de_prueba("TEMP-SKIP")
+
+    response = client.patch(f"/alerts/{alert_id}", json={"status": "resolved"})
+
+    assert response.status_code == 409
+    assert "open -> resolved" in response.json()["detail"]
+
+
+def test_alerta_rechaza_estado_desconocido():
+    alert_id = _crear_alerta_de_prueba("TEMP-UNKNOWN")
+
+    response = client.patch(f"/alerts/{alert_id}", json={"status": "closed"})
+
+    assert response.status_code == 422
+
+
+def test_alerta_inexistente_devuelve_404():
+    response = client.patch("/alerts/999", json={"status": "acknowledged"})
+
+    assert response.status_code == 404

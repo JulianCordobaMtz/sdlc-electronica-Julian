@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
+from app.domain.alert import AlertStatus
+
 
 class AlertBase(BaseModel):
     sensor_id: str
@@ -16,7 +18,7 @@ class AlertCreate(AlertBase):
 
 
 class AlertUpdate(BaseModel):
-    status: str = Field(..., examples=["acknowledged", "resolved"])
+    status: AlertStatus = Field(..., examples=["acknowledged", "resolved"])
 
 
 class AlertOut(AlertBase):

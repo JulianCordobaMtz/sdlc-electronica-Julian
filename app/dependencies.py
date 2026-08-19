@@ -5,8 +5,13 @@ from app.db import get_db
 from app.repositories.alert_repository import AlertRepository
 from app.repositories.reading_repo import ReadingRepository
 from app.repositories.sensor_repo import SensorRepository
+from app.services.alert_service import AlertService
 from app.services.anomaly_detector import AnomalyDetector, DatabaseAlertStrategy
 from app.services.reading_service import ReadingService
+
+
+def get_alert_service(db: Session = Depends(get_db)) -> AlertService:
+    return AlertService(AlertRepository(db))
 
 
 def get_reading_service(db: Session = Depends(get_db)) -> ReadingService:
