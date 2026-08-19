@@ -34,3 +34,13 @@ class SensorReadingOut(SensorReadingIn):
     sensor_id: str
     timestamp: datetime
     is_active: bool
+
+
+class ReadingStatsOut(BaseModel):
+    sensor_id: str
+    from_date: datetime | None
+    to_date: datetime | None
+    count: int
+    minimum: float
+    maximum: float
+    average: float

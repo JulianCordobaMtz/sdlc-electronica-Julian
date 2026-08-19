@@ -142,3 +142,37 @@ def test_operaciones_completas_lecturas():
     # 6. Eliminar lectura
     res_del = client.delete(f"/readings/{reading_id}")
     assert res_del.status_code == 204
+
+
+def test_estadisticas_por_sensor_ignoran_lecturas_eliminadas():
+    client.post(
+        "/sensors",
+        json={"sensor_id": "TEMP-STATS", "name": "Stats", "type": "temperatura"},
+    )
+    reading_ids = []
+    for value in (10.0, 20.0, 30.0, 100.0):
+        response = client.post(
+            "/sensors/TEMP-STATS/readings", json={"value": value, "unit": "C"}
+        )
+        reading_ids.append(response.json()["id"])
+
+    client.delete(f"/readings/{reading_ids[-1]}")
+
+    response = client.get("/sensors/TEMP-STATS/statistics")
+
+    assert response.status_code == 200
+    assert response.json() == {
+        "sensor_id": "TEMP-STATS",
+        "from_date": None,
+        "to_date": None,
+        "count": 3,
+        "minimum": 10.0,
+        "maximum": 30.0,
+        "average": 20.0,
+    }
+
+
+def test_estadisticas_sin_lecturas_devuelven_404():
+    response = client.get("/sensors/SIN-LECTURAS/statistics")
+
+    assert response.status_code == 404

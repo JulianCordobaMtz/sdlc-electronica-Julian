@@ -1,4 +1,7 @@
+from datetime import datetime
 from unittest.mock import Mock
+
+import pytest
 
 from app.schemas.reading import SensorReadingIn
 from app.services.anomaly_detector import AnomalyDetector
@@ -17,6 +20,9 @@ class FakeReadingRepository:
                 self.unit = data.get("unit", "C")
         return FakeReading(sensor_id, data)
 
+    def get_statistics(self, sensor_id, from_date, to_date):
+        return 3, 10.0, 30.0, 20.0
+
 def test_registrar_lectura_con_fake_repo():
     fake_repo = FakeReadingRepository()
     detector = Mock(spec=AnomalyDetector)
@@ -28,3 +34,29 @@ def test_registrar_lectura_con_fake_repo():
     
     assert resultado.value == 25.5
     assert resultado.sensor_id == "TEMP-FAKE"
+
+
+def test_obtener_estadisticas_con_fake_repo():
+    servicio = ReadingService(
+        repo=FakeReadingRepository(), detector=Mock(spec=AnomalyDetector)
+    )
+
+    stats = servicio.obtener_estadisticas("TEMP-FAKE", None, None)
+
+    assert stats.count == 3
+    assert stats.minimum == 10.0
+    assert stats.maximum == 30.0
+    assert stats.average == 20.0
+
+
+def test_obtener_estadisticas_rechaza_periodo_invertido():
+    servicio = ReadingService(
+        repo=FakeReadingRepository(), detector=Mock(spec=AnomalyDetector)
+    )
+
+    with pytest.raises(ValueError, match="no puede ser mayor"):
+        servicio.obtener_estadisticas(
+            "TEMP-FAKE",
+            datetime.fromisoformat("2026-08-18T12:00:00"),
+            datetime.fromisoformat("2026-08-17T12:00:00"),
+        )

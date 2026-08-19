@@ -1,6 +1,7 @@
+from datetime import datetime
 from typing import Any, Protocol
 
-from app.schemas.reading import SensorReadingIn, SensorReadingUpdate
+from app.schemas.reading import ReadingStatsOut, SensorReadingIn, SensorReadingUpdate
 from app.services.anomaly_detector import AnomalyDetector
 
 
@@ -10,6 +11,12 @@ class SensorLookupRepository(Protocol):
     def get_by_sensor(
         self, sensor_id: str, limit: int, offset: int, from_date: Any, to_date: Any
     ) -> Any: ...
+    def get_statistics(
+        self,
+        sensor_id: str,
+        from_date: datetime | None,
+        to_date: datetime | None,
+    ) -> tuple[int, float | None, float | None, float | None]: ...
     def update(self, db_reading: Any, data: dict[str, Any]) -> Any: ...
     def delete(self, db_reading: Any) -> None: ...
 
@@ -59,6 +66,31 @@ class ReadingService:
         if from_date and to_date and from_date > to_date:
             raise ValueError("La fecha 'from' no puede ser mayor a 'to'")
         return self.repo.get_by_sensor(sensor_id, limit, offset, from_date, to_date)
+
+    def obtener_estadisticas(
+        self,
+        sensor_id: str,
+        from_date: datetime | None,
+        to_date: datetime | None,
+    ) -> ReadingStatsOut:
+        if from_date and to_date and from_date > to_date:
+            raise ValueError("La fecha 'from' no puede ser mayor a 'to'")
+
+        count, minimum, maximum, average = self.repo.get_statistics(
+            sensor_id, from_date, to_date
+        )
+        if count == 0 or minimum is None or maximum is None or average is None:
+            raise LookupError("No hay lecturas para el sensor y periodo solicitados")
+
+        return ReadingStatsOut(
+            sensor_id=sensor_id,
+            from_date=from_date,
+            to_date=to_date,
+            count=count,
+            minimum=minimum,
+            maximum=maximum,
+            average=average,
+        )
 
     def actualizar_lectura(
         self, reading_id: int, reading_update: SensorReadingUpdate
