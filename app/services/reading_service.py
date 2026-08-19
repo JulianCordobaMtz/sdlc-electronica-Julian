@@ -68,6 +68,8 @@ class ReadingService:
     def listar_lecturas(
         self, sensor_id: str, limit: int, offset: int, from_date, to_date
     ):
+        if self.sensor_repo.get_by_id(sensor_id) is None:
+            raise LookupError("Sensor no encontrado")
         if from_date and to_date and from_date > to_date:
             raise ValueError("La fecha 'from' no puede ser mayor a 'to'")
         return self.repo.get_by_sensor(sensor_id, limit, offset, from_date, to_date)
@@ -78,6 +80,8 @@ class ReadingService:
         from_date: datetime | None,
         to_date: datetime | None,
     ) -> ReadingStatsOut:
+        if self.sensor_repo.get_by_id(sensor_id) is None:
+            raise LookupError("Sensor no encontrado")
         if from_date and to_date and from_date > to_date:
             raise ValueError("La fecha 'from' no puede ser mayor a 'to'")
 

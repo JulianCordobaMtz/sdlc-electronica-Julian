@@ -45,6 +45,8 @@ def list_readings(
     """Listar lecturas de un sensor con filtros opcionales de fecha."""
     try:
         return service.listar_lecturas(sensor_id, limit, offset, from_date, to_date)
+    except LookupError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 

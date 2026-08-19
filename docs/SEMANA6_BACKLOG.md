@@ -13,9 +13,9 @@ verde y desplegado.
 
 | ID | Estado al iniciar S6 | Evidencia o brecha | Prioridad |
 |---|---|---|---|
-| RF-1 | Parcial | CRUD y desactivación existen; faltan validaciones y pruebas de duplicados | P0 |
+| RF-1 | Implementado | CRUD, desactivación, duplicados y paginación validados | P0 |
 | RF-2 | Implementado | Valida tipo, unidad, rango físico y sensor activo | P0 |
-| RF-3 | Casi listo | Paginación y fechas existen; faltan casos borde de integración | P0 |
+| RF-3 | Implementado | Paginación, fechas y sensor inexistente cubiertos por integración | P0 |
 | RF-4 | Implementado | Genera alertas WARNING/CRITICAL por umbral | P0 |
 | RF-5 | Implementado | Flujo open/acknowledged/resolved validado en servicio | P0 |
 | RF-6 | Implementado | Estadísticas por sensor y periodo con pruebas | P0 |
@@ -34,7 +34,7 @@ verde y desplegado.
 - [x] Completar validación física por tipo de sensor en dominio puro.
 - [x] Rechazar lecturas para sensores inexistentes o inactivos.
 - [x] Validar estados y transiciones de alertas mediante un servicio.
-- [ ] Añadir pruebas de integración para RF-1 a RF-6 y conservar cobertura >= 80%.
+- [x] Añadir pruebas de integración para RF-1 a RF-6 y conservar cobertura >= 80%.
 
 ## Mini-sprint 2 - Producción y evidencia
 

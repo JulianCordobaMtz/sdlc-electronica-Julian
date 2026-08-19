@@ -1,11 +1,14 @@
+from datetime import datetime
+
 import pytest
 from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.db import Base, get_db
 from app.main import app
+from app.models.reading import ReadingModel
 
 # 1. Configurar una base de datos SQLite EN MEMORIA (se borra al terminar)
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -66,6 +69,34 @@ def test_sensor_no_encontrado_devuelve_404():
     response = client.get("/sensors/ID-FALSO")
     assert response.status_code == 404
     assert response.json()["detail"] == "Sensor no encontrado"
+
+
+def test_sensor_duplicado_devuelve_409():
+    payload = {
+        "sensor_id": "TEMP-DUP",
+        "name": "Sensor duplicado",
+        "type": "temperatura",
+    }
+    first_response = client.post("/sensors", json=payload)
+    duplicate_response = client.post("/sensors", json=payload)
+
+    assert first_response.status_code == 201
+    assert duplicate_response.status_code == 409
+    assert "Ya existe un sensor" in duplicate_response.json()["detail"]
+
+
+@pytest.mark.parametrize(
+    "params",
+    [
+        {"limit": 0},
+        {"limit": 101},
+        {"offset": -1},
+    ],
+)
+def test_paginacion_de_sensores_rechaza_limites_invalidos(params):
+    response = client.get("/sensors", params=params)
+
+    assert response.status_code == 422
 
 
 # ================= TESTS DE LECTURAS =================
@@ -229,6 +260,66 @@ def test_estadisticas_sin_lecturas_devuelven_404():
     response = client.get("/sensors/SIN-LECTURAS/statistics")
 
     assert response.status_code == 404
+
+
+def test_consulta_de_lecturas_requiere_sensor_existente():
+    response = client.get("/sensors/NO-EXISTE/readings")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Sensor no encontrado"
+
+
+def test_consulta_de_lecturas_rechaza_periodo_invertido():
+    client.post(
+        "/sensors",
+        json={"sensor_id": "TEMP-DATE", "name": "Fechas", "type": "temperatura"},
+    )
+
+    response = client.get(
+        "/sensors/TEMP-DATE/readings",
+        params={"from": "2026-08-19T12:00:00", "to": "2026-08-18T12:00:00"},
+    )
+
+    assert response.status_code == 400
+    assert "no puede ser mayor" in response.json()["detail"]
+
+
+def test_consulta_de_lecturas_filtra_fechas_y_pagina_resultados():
+    client.post(
+        "/sensors",
+        json={"sensor_id": "TEMP-FILTER", "name": "Filtro", "type": "temperatura"},
+    )
+    for value in (10.0, 20.0, 30.0):
+        client.post(
+            "/sensors/TEMP-FILTER/readings",
+            json={"value": value, "unit": "C"},
+        )
+
+    with TestingSessionLocal() as db:
+        readings = list(
+            db.scalars(
+                select(ReadingModel)
+                .where(ReadingModel.sensor_id == "TEMP-FILTER")
+                .order_by(ReadingModel.id)
+            )
+        )
+        readings[0].timestamp = datetime.fromisoformat("2026-08-17T12:00:00")
+        readings[1].timestamp = datetime.fromisoformat("2026-08-18T12:00:00")
+        readings[2].timestamp = datetime.fromisoformat("2026-08-19T12:00:00")
+        db.commit()
+
+    response = client.get(
+        "/sensors/TEMP-FILTER/readings",
+        params={
+            "from": "2026-08-18T00:00:00",
+            "to": "2026-08-19T23:59:59",
+            "limit": 1,
+            "offset": 1,
+        },
+    )
+
+    assert response.status_code == 200
+    assert [reading["value"] for reading in response.json()] == [30.0]
 
 
 def _crear_alerta_de_prueba(sensor_id: str = "TEMP-ALERT") -> int:

@@ -29,6 +29,9 @@ class SensorService:
         if threshold is not None and not math.isfinite(threshold):
             raise ValueError("El umbral de alerta debe ser un número finito")
 
+        if self.repo.get_by_id(sensor_id) is not None:
+            raise ValueError(f"Ya existe un sensor con el ID {sensor_id}")
+
         return self.repo.create(sensor_in)
 
     def get_sensors(self, limit: int = 50, offset: int = 0) -> list[SensorModel]:

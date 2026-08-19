@@ -110,6 +110,18 @@ def test_create_sensor_nan_threshold_rejected(sensor_service: SensorService):
         sensor_service.create_sensor(inf_sensor)
 
 
+def test_create_sensor_rejects_duplicate_id(sensor_service: SensorService):
+    sensor = SensorIn(
+        sensor_id="TEMP-DUP",
+        name="Sensor original",
+        type="temperatura",
+    )
+    sensor_service.create_sensor(sensor)
+
+    with pytest.raises(ValueError, match="Ya existe un sensor con el ID TEMP-DUP"):
+        sensor_service.create_sensor(sensor)
+
+
 # Test 3: Soft Delete (Borrado lógico para salvar el historial)
 def test_sensor_soft_delete_preserves_historical_data(sensor_service: SensorService):
     # Crear un sensor activo inicialmente

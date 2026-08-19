@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
 from app.db import get_db
@@ -33,8 +33,8 @@ def create_sensor(
 
 @router.get("/", response_model=list[SensorOut], status_code=200)
 def list_sensors(
-    limit: int = 50,
-    offset: int = 0,
+    limit: int = Query(50, ge=1, le=100),
+    offset: int = Query(0, ge=0),
     service: SensorService = Depends(get_sensor_service),
 ):
     """Listar todos los sensores con paginación.
