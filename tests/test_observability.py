@@ -29,7 +29,9 @@ def test_health_returns_503_when_database_is_unavailable() -> None:
         app.dependency_overrides.pop(get_db, None)
 
     assert response.status_code == 503
-    assert response.json() == {"detail": "Base de datos no disponible"}
+    assert response.json()["detail"] == "Base de datos no disponible"
+    assert response.json()["error"]["type"] == "http_error"
+    assert response.json()["error"]["request_id"]
 
 
 def test_metrics_exposes_request_count_and_duration() -> None:
