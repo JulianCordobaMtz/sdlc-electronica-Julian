@@ -63,7 +63,7 @@ jobs:
     steps:
       - name: Validar configuración de Render
         env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_API_KEY: ${{ secrets.API_KEY_SENSORHUB }}
           RENDER_SERVICE_ID: ${{ vars.RENDER_SERVICE_ID }}
         run: |
           test -n "$RENDER_API_KEY" || (echo "Falta el secreto RENDER_API_KEY" && exit 1)
@@ -71,7 +71,7 @@ jobs:
 
       - name: Desplegar el commit validado
         env:
-          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_API_KEY: ${{ secrets.API_KEY_SENSORHUB }}
           RENDER_SERVICE_ID: ${{ vars.RENDER_SERVICE_ID }}
         run: |
           curl --fail-with-body --silent --show-error --retry 3 \
