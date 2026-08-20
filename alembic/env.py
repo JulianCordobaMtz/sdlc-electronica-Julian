@@ -8,12 +8,10 @@ from alembic import context
 # Importar `Base` para registrar la metadata
 from app.db import Base
 
-# Importar modelos para que Alembic detecte las tablas
-try:
-    from app.models.reading import Reading  # noqa: F401
-    from app.models.sensor import Sensor  # noqa: F401
-except ImportError:
-    pass
+# Importar modelos para que Alembic detecte todas las tablas.
+from app.models.alert import AlertModel  # noqa: F401, E402
+from app.models.reading import ReadingModel  # noqa: F401, E402
+from app.models.sensor import SensorModel  # noqa: F401, E402
 
 # Objeto de configuración de Alembic [3]
 config = context.config
@@ -31,11 +29,11 @@ if database_url:
     # Render puede entregar postgres://, pero SQLAlchemy 2.0 exige postgresql:// [6]
     if database_url.startswith("postgres://"):
         database_url = database_url.replace("postgres://", "postgresql://", 1)
-    
+
     # Forzamos el uso del driver psycopg que agregamos a requirements.txt [5]
     if "postgresql://" in database_url and "+psycopg" not in database_url:
         database_url = database_url.replace("postgresql://", "postgresql+psycopg://", 1)
-    
+
     # Inyectamos la URL de producción dinámicamente en Alembic [7]
     config.set_main_option("sqlalchemy.url", database_url)
 else:
@@ -44,6 +42,7 @@ else:
 # ---------------------------------------------------------------------
 
 target_metadata = Base.metadata
+
 
 def run_migrations_offline() -> None:
     """Ejecutar migraciones en modo 'offline'."""
@@ -58,11 +57,12 @@ def run_migrations_offline() -> None:
     with context.begin_transaction():
         context.run_migrations()
 
+
 def run_migrations_online() -> None:
     """Ejecutar migraciones en modo 'online'."""
     configuration = config.get_section(config.config_ini_section, {})
     url = config.get_main_option("sqlalchemy.url")
-    
+
     # Evitar bloqueos de hilos en pruebas de desarrollo local con SQLite [5]
     connect_args = {}
     if url and url.startswith("sqlite"):
@@ -76,12 +76,11 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 if context.is_offline_mode():
     run_migrations_offline()

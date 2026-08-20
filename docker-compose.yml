@@ -1,23 +1,40 @@
 services:
   db:
     image: postgres:15
-    container_name: sensorhub-db
-    env_file:
-      - .env
-    ports:
-      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-sensorhub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-sensorhub_local}
+      POSTGRES_DB: ${POSTGRES_DB:-sensorhub}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
   api:
     build: .
-    container_name: sensorhub-api
-    env_file:
-      - .env
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://sensorhub:sensorhub_local@db:5432/sensorhub}
     ports:
       - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=2)"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
 
 volumes:
   postgres_data:

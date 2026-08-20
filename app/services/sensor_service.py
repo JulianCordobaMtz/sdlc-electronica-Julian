@@ -8,9 +8,7 @@ from app.schemas.sensor import SensorIn, SensorUpdate
 @runtime_checkable
 class SensorRepositoryProtocol(Protocol):
     def get_by_id(self, sensor_id: str) -> SensorModel | None: ...
-    def get_all(
-        self, limit: int = 50, offset: int = 0
-    ) -> list[SensorModel]: ...
+    def get_all(self, limit: int = 50, offset: int = 0) -> list[SensorModel]: ...
     def create(self, sensor_in: SensorIn) -> SensorModel: ...
     def update(
         self, sensor: SensorModel, update_data: dict[str, Any]
@@ -30,6 +28,9 @@ class SensorService:
         threshold = getattr(sensor_in, "alert_threshold", None)
         if threshold is not None and not math.isfinite(threshold):
             raise ValueError("El umbral de alerta debe ser un número finito")
+
+        if self.repo.get_by_id(sensor_id) is not None:
+            raise ValueError(f"Ya existe un sensor con el ID {sensor_id}")
 
         return self.repo.create(sensor_in)
 

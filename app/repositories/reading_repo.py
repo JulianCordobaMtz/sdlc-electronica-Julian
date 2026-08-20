@@ -1,4 +1,6 @@
-from sqlalchemy import select
+from datetime import datetime
+
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.reading import ReadingModel
@@ -24,16 +26,38 @@ class ReadingRepository:
         self, sensor_id: str, limit: int, offset: int, from_date, to_date
     ):
         stmt = select(ReadingModel).where(
-            ReadingModel.sensor_id == sensor_id,
-            ReadingModel.is_active
+            ReadingModel.sensor_id == sensor_id, ReadingModel.is_active
         )
         if from_date:
             stmt = stmt.where(ReadingModel.timestamp >= from_date)
         if to_date:
             stmt = stmt.where(ReadingModel.timestamp <= to_date)
-            
+
         stmt = stmt.offset(offset).limit(limit)
         return self.db.scalars(stmt).all()
+
+    def get_statistics(
+        self,
+        sensor_id: str,
+        from_date: datetime | None,
+        to_date: datetime | None,
+    ) -> tuple[int, float | None, float | None, float | None]:
+        stmt = select(
+            func.count(ReadingModel.id),
+            func.min(ReadingModel.value),
+            func.max(ReadingModel.value),
+            func.avg(ReadingModel.value),
+        ).where(
+            ReadingModel.sensor_id == sensor_id,
+            ReadingModel.is_active,
+        )
+        if from_date:
+            stmt = stmt.where(ReadingModel.timestamp >= from_date)
+        if to_date:
+            stmt = stmt.where(ReadingModel.timestamp <= to_date)
+
+        count, minimum, maximum, average = self.db.execute(stmt).one()
+        return count, minimum, maximum, average
 
     def update(self, db_reading: ReadingModel, data: dict) -> ReadingModel:
         for key, value in data.items():

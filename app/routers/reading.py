@@ -3,7 +3,12 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 
 from app.dependencies import get_reading_service
-from app.schemas.reading import SensorReadingIn, SensorReadingOut, SensorReadingUpdate
+from app.schemas.reading import (
+    ReadingStatsOut,
+    SensorReadingIn,
+    SensorReadingOut,
+    SensorReadingUpdate,
+)
 from app.services.reading_service import ReadingService
 
 router = APIRouter()
@@ -40,6 +45,27 @@ def list_readings(
     """Listar lecturas de un sensor con filtros opcionales de fecha."""
     try:
         return service.listar_lecturas(sensor_id, limit, offset, from_date, to_date)
+    except LookupError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e)) from e
+
+
+@router.get(
+    "/sensors/{sensor_id}/statistics",
+    response_model=ReadingStatsOut,
+)
+def get_reading_statistics(
+    sensor_id: str,
+    from_date: datetime | None = Query(None, alias="from"),
+    to_date: datetime | None = Query(None, alias="to"),
+    service: ReadingService = Depends(get_reading_service),
+):
+    """Calcular mínimo, máximo y promedio de un sensor en un periodo."""
+    try:
+        return service.obtener_estadisticas(sensor_id, from_date, to_date)
+    except LookupError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 

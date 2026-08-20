@@ -1,50 +1,83 @@
-name: CI
+name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, semana6]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  deploy:
+  quality:
+    name: Calidad y pruebas
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+
     steps:
-      # 1. Descargar el código del repositorio
-      - name: Checkout de código
+      - name: Descargar código
         uses: actions/checkout@v4
 
-      # 2. Configurar Python
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: 'pip'
+          cache: pip
 
-      # 3. Instalar dependencias
       - name: Instalar dependencias
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install pytest pytest-cov ruff mypy
 
-      # 4. Linter con Ruff
-      - name: Ejecutar Linter (Ruff)
+      - name: Revisar estilo con Ruff
         run: ruff check .
 
-      # 5. Verificación de tipos con Mypy
-      - name: Verificar Tipado (Mypy)
+      - name: Revisar tipos con Mypy
         run: mypy app --ignore-missing-imports
 
-      # 6. Pruebas unitarias con cobertura mínima
-      - name: Ejecutar Pruebas (Pytest)
-        run: pytest --cov=app --cov-fail-under=80
+      - name: Ejecutar pruebas y cobertura
+        run: pytest --cov=app --cov-report=term-missing --cov-fail-under=80
 
-      # 7. Desplegar automáticamente en Render si todo pasa
-      - name: Redeploy en Render
-        if: success()
+  docker:
+    name: Construcción Docker
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Construir imagen sin publicarla
+        run: docker build --tag sensorhub:${{ github.sha }} .
+
+  deploy:
+    name: Despliegue en Render
+    needs: [quality, docker]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: production
+
+    steps:
+      - name: Validar configuración de Render
+        env:
+          RENDER_API_KEY: ${{ secrets.API_KEY_SENSORHUB }}
+          RENDER_SERVICE_ID: ${{ vars.RENDER_SERVICE_ID }}
         run: |
-          curl -X POST https://api.render.com/v1/services/srv-d9qiikrm8hqs738hlnng/deploys \
-          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-          -H "Accept: application/json"
+          test -n "$RENDER_API_KEY" || (echo "Falta el secreto RENDER_API_KEY" && exit 1)
+          test -n "$RENDER_SERVICE_ID" || (echo "Falta la variable RENDER_SERVICE_ID" && exit 1)
+
+      - name: Desplegar el commit validado
+        env:
+          RENDER_API_KEY: ${{ secrets.API_KEY_SENSORHUB }}
+          RENDER_SERVICE_ID: ${{ vars.RENDER_SERVICE_ID }}
+        run: |
+          curl --fail-with-body --silent --show-error --retry 3 \
+            --request POST \
+            --url "https://api.render.com/v1/services/${RENDER_SERVICE_ID}/deploys" \
+            --header "Authorization: Bearer ${RENDER_API_KEY}" \
+            --header "Accept: application/json" \
+            --header "Content-Type: application/json" \
+            --data "{\"commitId\":\"${GITHUB_SHA}\"}"

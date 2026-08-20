@@ -9,9 +9,10 @@ from app.db import Base
 if TYPE_CHECKING:
     from app.models.sensor import SensorModel
 
+
 class ReadingModel(Base):
     __tablename__ = "readings"
-    
+
     id: Mapped[int] = mapped_column(primary_key=True)
     sensor_id: Mapped[str] = mapped_column(
         String, ForeignKey("sensors.sensor_id"), index=True

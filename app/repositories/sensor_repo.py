@@ -1,6 +1,7 @@
 from typing import Any
 
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.sensor import SensorModel
@@ -24,7 +25,13 @@ class SensorRepository:
     def create(self, sensor_in: SensorIn) -> SensorModel:
         nuevo_sensor = SensorModel(**sensor_in.model_dump())
         self.db.add(nuevo_sensor)
-        self.db.commit()
+        try:
+            self.db.commit()
+        except IntegrityError as error:
+            self.db.rollback()
+            raise ValueError(
+                f"Ya existe un sensor con el ID {sensor_in.sensor_id}"
+            ) from error
         self.db.refresh(nuevo_sensor)
         return nuevo_sensor
 
