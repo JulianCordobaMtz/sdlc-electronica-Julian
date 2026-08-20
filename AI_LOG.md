@@ -1457,3 +1457,142 @@ La IA demostró una excelente capacidad analítica para realizar auditorías est
 Esta comparativa evidenció que una cobertura de código alta (superior al 90% en el proyecto evaluado) puede generar una falsa sensación de robustez si las pruebas están mal aisladas. El análisis humano detectó un fallo crítico de integración que la cobertura ocultaba: las pruebas consumían un archivo de base de datos físico y compartido (`sensorhub.db`) en lugar de levantar instancias independientes en memoria (`sqlite:///:memory:`) para cada test, lo que provocaba contaminación de datos y dependencias en el orden de ejecución. 
 
 El enfoque híbrido demuestra que la IA es un copiloto extraordinario para asegurar la calidad del código a nivel de sintaxis, tipos y casos borde matemáticos, pero el ingeniero humano sigue siendo el único capaz de guiar la arquitectura, asegurar el cumplimiento de las especificaciones del cliente y evitar el sobrediseño.
+
+---
+
+# Semana 6 - Integración final de SensorHub
+
+## Entrada 20 - Planificación contra la guía y control humano de Git
+
+### Objetivo
+
+Convertir los RF y RNF de la semana 6 en una secuencia de trabajo verificable,
+sin perder el control humano sobre los cambios.
+
+### Herramienta utilizada
+
+`Codex`
+
+### Prompt utilizado
+
+> Continúa la semana 6 en la rama semana6. Edita y prueba localmente, pero no
+> hagas commit ni push hasta que yo revise los cambios.
+
+### Propuesta de la IA
+
+La IA comparó el estado del repositorio con RF-1 a RF-7 y RNF-1 a RNF-6,
+propuso trabajar primero las brechas funcionales y después observabilidad,
+infraestructura, CI/CD y documentación.
+
+### Decisión y cambios realizados
+
+Acepté la secuencia, pero mantuve bajo mi responsabilidad cada `git add`,
+`commit` y `push`. También decidí llevar el backlog oficial en GitHub
+Projects y eliminar la copia `SEMANA6_BACKLOG.md` para no mantener dos fuentes
+de verdad.
+
+### Justificación
+
+Separar edición, revisión y publicación permitió comprobar cada incremento antes
+de incorporarlo al historial. El tablero conserva el estado del trabajo y Git
+conserva la evidencia técnica.
+
+## Entrada 21 - Funcionalidad, observabilidad y manejo de fallos
+
+### Objetivo
+
+Cerrar RF-1 a RF-7 y las brechas de robustez sin agregar tracks opcionales.
+
+### Herramienta utilizada
+
+`Codex`
+
+### Prompt utilizado
+
+> Continúa con lo que sigue, explícame qué se modificará y pruébalo localmente.
+
+### Propuesta de la IA
+
+La IA propuso completar validaciones físicas, filtros por fecha, transiciones de
+alertas, estadísticas, healthcheck con base de datos, métricas, logs JSON y un
+manejador global de errores.
+
+### Decisión y cambios realizados
+
+Acepté cambios pequeños por requisito y revisé sus archivos antes de guardar
+cada commit. Se conservaron respuestas compatibles con las pruebas existentes,
+se añadió un `X-Request-ID` y se evitó mostrar trazas internas al cliente.
+
+### Justificación
+
+El alcance corresponde a SensorHub competente+ y cubre observabilidad real. La
+suite final de esta etapa ejecutó 56 pruebas con 93.99% de cobertura, además de
+Ruff y Mypy en verde.
+
+## Entrada 22 - PostgreSQL, Alembic y CI/CD reproducible
+
+### Objetivo
+
+Demostrar que el sistema puede construirse desde cero y desplegar únicamente
+después de validar calidad.
+
+### Herramienta utilizada
+
+`Codex`, Docker Desktop y GitHub Actions
+
+### Prompt utilizado
+
+> Trabaja en lo que sigue dentro del proyecto.
+
+### Propuesta de la IA
+
+La IA propuso healthchecks en Compose, espera explícita de PostgreSQL, ejecución
+de Alembic al arrancar, usuario de contenedor sin privilegios y un pipeline
+separado en calidad, construcción Docker y despliegue.
+
+### Decisión y cambios realizados
+
+Acepté la estrategia y autoricé una prueba temporal aislada con PostgreSQL. La
+base de prueba confirmó la revisión `0001_sensorhub_schema` y las tablas
+`sensors`, `readings`, `alert` y `alembic_version`. El volumen temporal se
+eliminó al terminar. El workflow se validó con actionlint antes del commit.
+
+### Justificación
+
+La prueba real evitó confundir una configuración YAML válida con un sistema
+funcional. Separar CI y CD garantiza que Render no reciba un commit que no haya
+pasado pruebas y construcción.
+
+## Entrada 23 - Documentación basada en evidencia
+
+### Objetivo
+
+Cumplir RNF-6 y preparar la defensa técnica sin documentar capacidades que aún
+no estén verificadas.
+
+### Herramienta utilizada
+
+`Codex`
+
+### Prompt utilizado
+
+> Dale, empieza a trabajarlo.
+
+### Propuesta de la IA
+
+La IA consultó directamente la guía de estudio, revisó el código, los ADR y la
+URL pública; después propuso reescribir el README, registrar la decisión de
+persistencia/despliegue y crear un guion de demostración.
+
+### Decisión y cambios realizados
+
+Acepté documentar RF/RNF, arquitectura Mermaid, instalación, endpoints,
+pruebas, observabilidad y CI/CD. La documentación deja explícito que
+`/metrics` debe volver a comprobarse después del merge a `main`, porque la
+versión pública anterior todavía respondía 404 en ese endpoint.
+
+### Justificación
+
+Una documentación defendible distingue entre lo probado localmente y lo
+desplegado. Esto evita presentar como terminada una función que aún no está en
+producción y deja una checklist concreta para el cierre.
