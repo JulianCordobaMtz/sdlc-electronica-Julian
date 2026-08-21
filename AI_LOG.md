@@ -1596,3 +1596,39 @@ versión pública anterior todavía respondía 404 en ese endpoint.
 Una documentación defendible distingue entre lo probado localmente y lo
 desplegado. Esto evita presentar como terminada una función que aún no está en
 producción y deja una checklist concreta para el cierre.
+
+## Entrada 24 - Verificación de producción y guion final
+
+### Objetivo
+
+Cerrar la evidencia de Semana 6 después del merge y adaptar la demostración a
+un único video técnico de aproximadamente 10 minutos.
+
+### Herramienta utilizada
+
+`Codex`
+
+### Prompt utilizado
+
+> Primero vamos a cerrar el README y vas a darme el guion para el video.
+
+### Propuesta de la IA
+
+La IA propuso comprobar la versión pública antes de declarar terminada la
+entrega, corregir el estado desactualizado del README y preparar fuera del
+repositorio un guion de video con tiempos, acciones visibles y explicaciones
+técnicas.
+
+### Decisión y cambios realizados
+
+Acepté la verificación controlada en producción. Se comprobaron `/health`,
+`/metrics` y el flujo completo de RF-1 a RF-7 con un sensor temporal que quedó
+desactivado. Después se actualizó el README y se preparó, como material personal
+fuera del repositorio, un guion de 9:30 a 10:00 minutos.
+
+### Justificación
+
+La ejecución verde del pipeline demuestra que GitHub aceptó el despliegue,
+pero la prueba directa confirma que la nueva versión y PostgreSQL realmente
+responden. El guion reúne la demostración funcional y la defensa técnica sin
+añadir características que pongan en riesgo la entrega.
