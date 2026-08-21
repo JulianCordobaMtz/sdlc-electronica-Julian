@@ -21,10 +21,11 @@ sistema usa FastAPI, SQLAlchemy, PostgreSQL, Alembic, Docker y GitHub Actions.
 - [Métricas](https://sensorhub-api-julian.onrender.com/metrics)
 - [GitHub Actions](https://github.com/JulianCordobaMtz/sdlc-electronica-julian/actions)
 
-> La rama `semana6` contiene el incremento final. Antes de la entrega se debe
-> integrar en `main` y comprobar nuevamente RF-1 a RF-7 en estas URLs. En la
-> última revisión previa al merge, `/docs` y `/health` respondían, pero
-> `/metrics` aún no estaba desplegado.
+La versión final de Semana 6 está integrada en `main` y desplegada en Render.
+El 20 de agosto de 2026 se verificaron RF-1 a RF-7 directamente en producción:
+creación y actualización de sensor, lecturas normal y anómala, generación y
+resolución de alerta, filtros, estadísticas y desactivación lógica. `/docs`,
+`/health` y `/metrics` respondieron correctamente.
 
 ## Requisitos funcionales
 
@@ -167,7 +168,7 @@ El workflow ejecuta:
 2. Construcción de la imagen Docker sin publicarla.
 3. Despliegue del commit validado a Render únicamente en un push a `main`.
 
-El repositorio necesita el secreto `RENDER_API_KEY` y la variable
+El repositorio necesita el secreto `API_KEY_SENSORHUB` y la variable
 `RENDER_SERVICE_ID`. Render usa `/health` para aceptar o rechazar el
 despliegue.
 
@@ -190,9 +191,10 @@ despliegue.
 - [Guía de video y presentación](docs/DEMO_Y_PRESENTACION.md)
 - [Historial del pipeline](https://github.com/JulianCordobaMtz/sdlc-electronica-julian/actions)
 
-## Pendientes antes de entregar
+## Estado de entrega
 
-- Integrar `semana6` en `main` mediante Pull Request.
-- Confirmar el trabajo de despliegue en verde.
-- Probar RF-1 a RF-7 directamente en producción.
-- Grabar el video de respaldo y ensayar la presentación.
+- [x] RF-1 a RF-7 verificados directamente en producción.
+- [x] Pipeline de `main` y despliegue en verde.
+- [x] Cobertura de pruebas superior al 80%.
+- [x] README, diagrama Mermaid, ADRs y bitácora de IA.
+- [ ] Grabar y revisar el video final de aproximadamente 10 minutos.
