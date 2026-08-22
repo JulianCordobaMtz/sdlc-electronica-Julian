@@ -21,11 +21,9 @@ sistema usa FastAPI, SQLAlchemy, PostgreSQL, Alembic, Docker y GitHub Actions.
 - [Métricas](https://sensorhub-api-julian.onrender.com/metrics)
 - [GitHub Actions](https://github.com/JulianCordobaMtz/sdlc-electronica-julian/actions)
 
-La versión final de Semana 6 está integrada en `main` y desplegada en Render.
-El 20 de agosto de 2026 se verificaron RF-1 a RF-7 directamente en producción:
-creación y actualización de sensor, lecturas normal y anómala, generación y
-resolución de alerta, filtros, estadísticas y desactivación lógica. `/docs`,
-`/health` y `/metrics` respondieron correctamente.
+La versión publicada en Render implementa RF-1 a RF-7. La API, la conexión con
+PostgreSQL y los endpoints `/docs`, `/health` y `/metrics` fueron verificados en
+producción.
 
 ## Requisitos funcionales
 
@@ -188,13 +186,4 @@ despliegue.
 ## Evidencia de entrega
 
 - [Bitácora consolidada de IA](AI_LOG.md)
-- [Guía de video y presentación](docs/DEMO_Y_PRESENTACION.md)
 - [Historial del pipeline](https://github.com/JulianCordobaMtz/sdlc-electronica-julian/actions)
-
-## Estado de entrega
-
-- [x] RF-1 a RF-7 verificados directamente en producción.
-- [x] Pipeline de `main` y despliegue en verde.
-- [x] Cobertura de pruebas superior al 80%.
-- [x] README, diagrama Mermaid, ADRs y bitácora de IA.
-- [ ] Grabar y revisar el video final de aproximadamente 10 minutos.
